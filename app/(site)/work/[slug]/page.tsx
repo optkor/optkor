@@ -1,0 +1,113 @@
+import type { Metadata } from "next"
+import { notFound } from "next/navigation"
+import { Container } from "@/components/ui/Container"
+import { Eyebrow, Heading } from "@/components/ui/Heading"
+import { SafeImage } from "@/components/ui/Media"
+import { MediaGallery } from "@/components/work/MediaGallery"
+import { ProjectGrid } from "@/components/work/ProjectGrid"
+import { getProjectBySlug, getRelatedProjects } from "@/lib/queries/projects"
+import { getDictionary } from "@/lib/i18n/get-dictionary"
+
+type Props = { params: Promise<{ slug: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const { data: project } = await getProjectBySlug(slug)
+
+  if (!project) {
+    return { title: "Project not found" }
+  }
+
+  return {
+    title: project.title,
+    description: project.short_description ?? project.description ?? undefined,
+    openGraph: {
+      title: project.title,
+      description: project.short_description ?? undefined,
+      images: project.cover_image ? [project.cover_image] : [],
+    },
+  }
+}
+
+export default async function CaseStudyPage({ params }: Props) {
+  const { slug } = await params
+  const { dict } = await getDictionary()
+  const { data: project } = await getProjectBySlug(slug)
+
+  if (!project) {
+    notFound()
+  }
+
+  const { data: related } = await getRelatedProjects(project.slug, project.category)
+
+  return (
+    <article>
+      <Container className="py-24 md:py-32">
+        <Eyebrow>{[project.category, project.year].filter(Boolean).join(" · ") || dict.caseStudy.category}</Eyebrow>
+        <Heading as="h1" size="display" className="mt-6 max-w-4xl">
+          {project.title}
+        </Heading>
+
+        <dl className="mt-10 grid grid-cols-2 gap-8 border-t border-line pt-8 sm:grid-cols-3 sm:max-w-xl">
+          {project.client && (
+            <div>
+              <dt className="text-xs uppercase tracking-wider text-muted">{dict.caseStudy.client}</dt>
+              <dd className="mt-1 text-sm text-paper">{project.client}</dd>
+            </div>
+          )}
+          {project.category && (
+            <div>
+              <dt className="text-xs uppercase tracking-wider text-muted">{dict.caseStudy.category}</dt>
+              <dd className="mt-1 text-sm text-paper">{project.category}</dd>
+            </div>
+          )}
+          {project.year && (
+            <div>
+              <dt className="text-xs uppercase tracking-wider text-muted">{dict.caseStudy.year}</dt>
+              <dd className="mt-1 text-sm text-paper">{project.year}</dd>
+            </div>
+          )}
+        </dl>
+      </Container>
+
+      {project.cover_image && (
+        <div className="relative aspect-[16/9] w-full bg-ink-3">
+          <SafeImage
+            src={project.cover_image}
+            alt={project.title}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
+      )}
+
+      <Container className="py-16 md:py-24">
+        {project.description && (
+          <p className="max-w-2xl whitespace-pre-line text-base leading-relaxed text-paper-dim">
+            {project.description}
+          </p>
+        )}
+
+        {project.project_media.length > 0 && (
+          <div className="mt-16">
+            <Eyebrow>{dict.caseStudy.gallery}</Eyebrow>
+            <div className="mt-8">
+              <MediaGallery media={project.project_media} />
+            </div>
+          </div>
+        )}
+      </Container>
+
+      {related && related.length > 0 && (
+        <Container className="border-t border-line py-24">
+          <Eyebrow>{dict.caseStudy.related}</Eyebrow>
+          <div className="mt-10">
+            <ProjectGrid projects={related} />
+          </div>
+        </Container>
+      )}
+    </article>
+  )
+}
