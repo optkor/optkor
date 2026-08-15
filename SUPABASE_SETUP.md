@@ -61,7 +61,7 @@ Admin access is **not** a hardcoded password — it's a real Supabase Auth user 
 insert into public.admin_users (user_id) values ('<the-user-uuid>');
 ```
 
-That user can now sign in at `/admin/login`. Additional admins can be invited later from **Admin → Settings → Admin Access** in the app itself (this requires `SUPABASE_SERVICE_ROLE_KEY` to be set).
+That user can now sign in at `/admin/login`. This is the **only** time you need to touch the database or dashboard directly for admin accounts — from here on, use **Admin → Admin Users** in the app itself to create additional admins, reset passwords (including your own, from **Admin → Settings**), or disable/delete accounts. That page requires `SUPABASE_SERVICE_ROLE_KEY` to be set, since managing other users' accounts goes through the Supabase Auth Admin API rather than RLS.
 
 ## 6. Configure Storage
 

@@ -1,6 +1,7 @@
+import Link from "next/link"
 import { getSiteSettings } from "@/lib/queries/settings"
 import { SettingsForm } from "@/components/admin/SettingsForm"
-import { InviteAdminForm } from "@/components/admin/InviteAdminForm"
+import { ChangePasswordForm } from "@/components/admin/ChangePasswordForm"
 import { ErrorState } from "@/components/ui/States"
 
 export const metadata = { title: { absolute: "Settings — OPTKOR Admin" } }
@@ -22,12 +23,25 @@ export default async function AdminSettingsPage() {
       </div>
 
       <div className="mt-16 border-t border-line pt-10">
+        <h2 className="font-display text-xl text-paper">Change Password</h2>
+        <p className="mt-2 text-sm text-muted">Update the password for your own account.</p>
+        <div className="mt-6">
+          <ChangePasswordForm />
+        </div>
+      </div>
+
+      <div className="mt-16 border-t border-line pt-10">
         <h2 className="font-display text-xl text-paper">Admin Access</h2>
         <p className="mt-2 text-sm text-muted">
-          Invite another admin by email. They&apos;ll receive a Supabase invite to set their password.
+          Create accounts, reset passwords, or disable access for other administrators.
         </p>
         <div className="mt-6">
-          <InviteAdminForm />
+          <Link
+            href="/admin/users"
+            className="inline-block border border-line-strong px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-paper hover:border-accent hover:text-accent"
+          >
+            Manage Admin Users
+          </Link>
         </div>
       </div>
     </div>
