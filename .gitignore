@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code — personal/local session settings, not shared config
+.claude/settings.local.json
+
+# large reference-only brand documents (not needed to build/run the site)
+brand-assets/*.pdf
