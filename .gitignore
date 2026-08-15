@@ -44,5 +44,9 @@ next-env.d.ts
 # claude code — personal/local session settings, not shared config
 .claude/settings.local.json
 
+# supabase cli local link/cache state
+supabase/.temp
+supabase/.branches
+
 # large reference-only brand documents (not needed to build/run the site)
 brand-assets/*.pdf
