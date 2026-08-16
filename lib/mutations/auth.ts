@@ -3,12 +3,16 @@
 import { redirect } from "next/navigation"
 import { z } from "zod"
 import { createClient } from "@/lib/supabase/server"
-import { changeOwnPasswordSchema } from "@/lib/validations/admin-users"
+import { changeOwnPasswordSchema, resetPasswordSchema } from "@/lib/validations/admin-users"
 import type { MutationState } from "./projects"
 
 const loginSchema = z.object({
   email: z.string().trim().min(1).email(),
   password: z.string().min(1),
+})
+
+const forgotPasswordSchema = z.object({
+  email: z.string().trim().min(1).email(),
 })
 
 export type LoginState = { error: string | null }
@@ -103,6 +107,78 @@ export async function changeOwnPassword(
 
   // Sign out everywhere, including this session, so the old password can
   // no longer be used anywhere and the change takes effect immediately.
+  await supabase.auth.signOut({ scope: "global" })
+  redirect("/admin/login?notice=password_changed")
+}
+
+export type ForgotPasswordState = { status: "idle" | "success" | "error"; message: string }
+
+const FORGOT_PASSWORD_SUCCESS_MESSAGE =
+  "If that email belongs to an admin account, we've sent a password reset link. Check your inbox."
+
+export async function requestPasswordReset(
+  _prevState: ForgotPasswordState,
+  formData: FormData
+): Promise<ForgotPasswordState> {
+  const parsed = forgotPasswordSchema.safeParse({ email: formData.get("email") })
+
+  if (!parsed.success) {
+    return { status: "error", message: "Enter a valid email address." }
+  }
+
+  const supabase = await createClient()
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+
+  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
+    redirectTo: `${siteUrl}/auth/confirm?next=/admin/reset-password`,
+  })
+
+  // Always return the same message regardless of outcome — confirming or
+  // denying that an email belongs to an admin account is an enumeration
+  // risk. Real failures (rate limits, provider issues) are still logged.
+  if (error) {
+    console.error("[requestPasswordReset]", error.message)
+  }
+
+  return { status: "success", message: FORGOT_PASSWORD_SUCCESS_MESSAGE }
+}
+
+export async function setNewPasswordFromRecovery(
+  _prevState: MutationState,
+  formData: FormData
+): Promise<MutationState> {
+  const parsed = resetPasswordSchema.safeParse({
+    password: formData.get("password"),
+    confirm_password: formData.get("confirm_password"),
+  })
+
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Please fix the errors below.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    }
+  }
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return {
+      status: "error",
+      message: "Your reset link has expired or was already used. Request a new one.",
+    }
+  }
+
+  const { error } = await supabase.auth.updateUser({ password: parsed.data.password })
+
+  if (error) {
+    console.error("[setNewPasswordFromRecovery]", error.message)
+    return { status: "error", message: "Unable to reset your password." }
+  }
+
   await supabase.auth.signOut({ scope: "global" })
   redirect("/admin/login?notice=password_changed")
 }

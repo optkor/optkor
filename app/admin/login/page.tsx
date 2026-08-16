@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { LoginForm } from "@/components/admin/LoginForm"
 
 export const metadata: Metadata = {
@@ -9,9 +10,9 @@ export const metadata: Metadata = {
 export default async function AdminLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ notice?: string }>
+  searchParams: Promise<{ notice?: string; error?: string }>
 }) {
-  const { notice } = await searchParams
+  const { notice, error } = await searchParams
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-ink px-6">
@@ -26,10 +27,21 @@ export default async function AdminLoginPage({
             Password changed. Please sign in again.
           </p>
         )}
+        {error === "reset_link_invalid" && (
+          <p role="alert" className="mt-6 border border-danger/40 px-4 py-3 text-center text-sm text-danger">
+            That reset link has expired or was already used. Request a new one below.
+          </p>
+        )}
 
         <div className="mt-10">
           <LoginForm />
         </div>
+
+        <p className="mt-6 text-center text-xs text-muted">
+          <Link href="/admin/forgot-password" className="hover:text-accent">
+            Forgot password?
+          </Link>
+        </p>
       </div>
     </div>
   )

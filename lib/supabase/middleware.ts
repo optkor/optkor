@@ -4,6 +4,8 @@ import type { Database } from "./types"
 
 const PROTECTED_PREFIX = "/admin"
 const LOGIN_PATH = "/admin/login"
+// Reachable while signed out — entry points into the auth flow itself.
+const PUBLIC_ADMIN_PATHS = new Set([LOGIN_PATH, "/admin/forgot-password"])
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
@@ -38,7 +40,7 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   const isProtected =
-    pathname.startsWith(PROTECTED_PREFIX) && pathname !== LOGIN_PATH
+    pathname.startsWith(PROTECTED_PREFIX) && !PUBLIC_ADMIN_PATHS.has(pathname)
 
   if (isProtected) {
     if (!userData.user) {
