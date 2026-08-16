@@ -28,6 +28,8 @@ const ar = {
     back: "رجوع",
     featured: "مميز",
     all: "الكل",
+    viewProject: "عرض المشروع",
+    explore: "استكشف",
   },
   home: {
     heroEyebrow: "إنتاج بصري لشركات B2B",

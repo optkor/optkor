@@ -45,7 +45,7 @@ export default async function HomePage() {
             </div>
 
             <div className="mt-16">
-              <ProjectGrid projects={projects} feature />
+              <ProjectGrid projects={projects} feature viewLabel={dict.common.viewProject} />
             </div>
           </Container>
         </section>

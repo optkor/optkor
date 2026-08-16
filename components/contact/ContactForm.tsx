@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom"
 import { submitContactMessage, type ContactState } from "@/lib/mutations/contact"
 import { FormField, Input, Textarea, Select } from "@/components/ui/FormField"
 import { Button } from "@/components/ui/Button"
+import { MagneticCta } from "@/components/ui/MagneticCta"
 import { Reveal } from "@/components/motion/Reveal"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 
@@ -13,9 +14,11 @@ const initialState: ContactState = { status: "idle", message: "" }
 function SubmitButton({ dict }: { dict: Dictionary }) {
   const { pending } = useFormStatus()
   return (
-    <Button type="submit" size="lg" disabled={pending}>
-      {pending ? dict.contact.submitting : dict.contact.submit}
-    </Button>
+    <MagneticCta className="w-fit" cursorLabel={dict.contact.submit}>
+      <Button type="submit" size="lg" disabled={pending}>
+        {pending ? dict.contact.submitting : dict.contact.submit}
+      </Button>
+    </MagneticCta>
   )
 }
 

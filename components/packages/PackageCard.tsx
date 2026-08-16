@@ -1,6 +1,12 @@
+"use client"
+
+import { useRef } from "react"
 import Link from "next/link"
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils/cn"
 import { Reveal } from "@/components/motion/Reveal"
+import { useCursor } from "@/components/cursor/CursorContext"
+import { useMagnetic } from "@/hooks/useMagnetic"
 import type { PackageTier } from "@/lib/data/packages"
 
 export function PackageCard({
@@ -20,6 +26,9 @@ export function PackageCard({
 }) {
   const isPremium = tier.badge === "premium"
   const isCore = tier.badge === "core"
+  const cursor = useCursor()
+  const ctaRef = useRef<HTMLDivElement>(null)
+  const magnetic = useMagnetic(ctaRef, 0.3)
 
   return (
     <Reveal
@@ -52,17 +61,29 @@ export function PackageCard({
             {tier.cadence}
           </span>
         </p>
-        <Link
-          href={`/contact?package=${tier.slug}`}
-          className={cn(
-            "mt-6 inline-flex w-full items-center justify-center px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] transition-colors",
-            isPremium
-              ? "bg-ink text-paper hover:bg-ink/80"
-              : "border border-line-strong text-paper hover:border-accent hover:text-accent"
-          )}
+        <motion.div
+          ref={ctaRef}
+          style={magnetic.style}
+          onMouseMove={magnetic.onMouseMove}
+          onMouseEnter={() => cursor.setCursor("cta")}
+          onMouseLeave={() => {
+            magnetic.onMouseLeave?.()
+            cursor.resetCursor()
+          }}
+          className="mt-6"
         >
-          {requestLabel}
-        </Link>
+          <Link
+            href={`/contact?package=${tier.slug}`}
+            className={cn(
+              "inline-flex w-full items-center justify-center px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] transition-colors",
+              isPremium
+                ? "bg-ink text-paper hover:bg-ink/80"
+                : "border border-line-strong text-paper hover:border-accent hover:text-accent"
+            )}
+          >
+            {requestLabel}
+          </Link>
+        </motion.div>
       </div>
     </Reveal>
   )

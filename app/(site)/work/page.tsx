@@ -57,7 +57,7 @@ export default async function WorkPage({
         </Container>
       ) : projects.length > 0 ? (
         <Container className="pb-24 md:pb-32">
-          <ProjectGrid projects={projects} feature />
+          <ProjectGrid projects={projects} feature viewLabel={dict.common.viewProject} />
         </Container>
       ) : (
         <EmptyStateHero className="border-t border-line" eyebrow={dict.work.eyebrow} title={dict.work.empty} />

@@ -4,14 +4,16 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils/cn"
 import { Reveal } from "@/components/motion/Reveal"
+import { useCursor } from "@/components/cursor/CursorContext"
 import type { Service } from "@/lib/supabase/types"
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
-export function ServiceIndex({ services }: { services: Service[] }) {
+export function ServiceIndex({ services, exploreLabel = "Explore" }: { services: Service[]; exploreLabel?: string }) {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [focusIndex, setFocusIndex] = useState(0)
   const focused = services[focusIndex]
+  const cursor = useCursor()
 
   return (
     <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_380px]">
@@ -22,7 +24,14 @@ export function ServiceIndex({ services }: { services: Service[] }) {
 
           return (
             <Reveal key={service.id} as="li" delay={Math.min(index * 0.05, 0.3)}>
-              <div className="border-b border-line" onMouseEnter={() => setFocusIndex(index)}>
+              <div
+                className="border-b border-line"
+                onMouseEnter={() => {
+                  setFocusIndex(index)
+                  cursor.setCursor("link", exploreLabel)
+                }}
+                onMouseLeave={() => cursor.resetCursor()}
+              >
                 <button
                   type="button"
                   disabled={!expandable}

@@ -1,21 +1,34 @@
+"use client"
+
 import Link from "next/link"
 import { ViewTransition } from "react"
 import { SafeImage } from "@/components/ui/Media"
 import { Reveal } from "@/components/motion/Reveal"
+import { useCursor } from "@/components/cursor/CursorContext"
 import type { Project } from "@/lib/supabase/types"
 
 export function ProjectCard({
   project,
   index = 0,
   aspect = "aspect-[4/3]",
+  viewLabel,
 }: {
   project: Project
   index?: number
   aspect?: string
+  viewLabel: string
 }) {
+  const cursor = useCursor()
+
   return (
     <Reveal delay={Math.min(index * 0.06, 0.3)}>
-      <Link href={`/work/${project.slug}`} transitionTypes={["nav-forward"]} className="group block">
+      <Link
+        href={`/work/${project.slug}`}
+        transitionTypes={["nav-forward"]}
+        onMouseEnter={() => cursor.setCursor("project", viewLabel)}
+        onMouseLeave={() => cursor.resetCursor()}
+        className="group block"
+      >
         <div className={`relative w-full overflow-hidden bg-ink-3 ${aspect}`}>
           <ViewTransition name={`project-${project.id}`} share="auto">
             {project.cover_image ? (

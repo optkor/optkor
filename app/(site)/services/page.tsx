@@ -45,7 +45,7 @@ export default async function ServicesPage() {
         <EmptyStateHero className="border-t border-line" eyebrow={dict.services.eyebrow} title={dict.services.empty} />
       ) : (
         <Container className="pb-24 md:pb-32">
-          <ServiceIndex services={services} />
+          <ServiceIndex services={services} exploreLabel={dict.common.explore} />
         </Container>
       )}
     </ViewTransition>

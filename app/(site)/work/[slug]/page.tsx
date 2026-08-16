@@ -135,7 +135,7 @@ export default async function CaseStudyPage({ params }: Props) {
           <Container className="border-t border-line py-24">
             <Eyebrow>{dict.caseStudy.related}</Eyebrow>
             <div className="mt-10">
-              <ProjectGrid projects={related} />
+              <ProjectGrid projects={related} viewLabel={dict.common.viewProject} />
             </div>
           </Container>
         )}

@@ -18,12 +18,15 @@ export function ProjectGrid({
   emptyTitle = "No work yet",
   emptyBody,
   feature = false,
+  viewLabel = "View Project",
 }: {
   projects: Project[]
   emptyTitle?: string
   emptyBody?: string
   /** Give the first project a full-bleed lead treatment. */
   feature?: boolean
+  /** Cursor label shown on hover (localized — see dict.common.viewProject). */
+  viewLabel?: string
 }) {
   if (projects.length === 0) {
     return <EmptyState title={emptyTitle} body={emptyBody} />
@@ -35,7 +38,7 @@ export function ProjectGrid({
 
   return (
     <div className="flex flex-col gap-16">
-      {showFeature && <ProjectFeature project={lead} />}
+      {showFeature && <ProjectFeature project={lead} viewLabel={viewLabel} />}
 
       {gridProjects.length > 0 && (
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-6">
@@ -43,7 +46,7 @@ export function ProjectGrid({
             const { col, aspect } = RHYTHM[index % RHYTHM.length]
             return (
               <div key={project.id} className={col}>
-                <ProjectCard project={project} index={index} aspect={aspect} />
+                <ProjectCard project={project} index={index} aspect={aspect} viewLabel={viewLabel} />
               </div>
             )
           })}

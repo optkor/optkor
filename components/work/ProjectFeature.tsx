@@ -1,7 +1,10 @@
+"use client"
+
 import Link from "next/link"
 import { ViewTransition } from "react"
 import { SafeImage } from "@/components/ui/Media"
 import { Reveal } from "@/components/motion/Reveal"
+import { useCursor } from "@/components/cursor/CursorContext"
 import type { Project } from "@/lib/supabase/types"
 
 /**
@@ -9,10 +12,18 @@ import type { Project } from "@/lib/supabase/types"
  * container, title overlaid directly on the image, rather than sitting in
  * the same grid rhythm as everything after it.
  */
-export function ProjectFeature({ project }: { project: Project }) {
+export function ProjectFeature({ project, viewLabel }: { project: Project; viewLabel: string }) {
+  const cursor = useCursor()
+
   return (
     <Reveal>
-      <Link href={`/work/${project.slug}`} transitionTypes={["nav-forward"]} className="group block">
+      <Link
+        href={`/work/${project.slug}`}
+        transitionTypes={["nav-forward"]}
+        onMouseEnter={() => cursor.setCursor("project", viewLabel)}
+        onMouseLeave={() => cursor.resetCursor()}
+        className="group block"
+      >
         <div className="relative aspect-[16/8] w-full overflow-hidden bg-ink-3 md:aspect-[21/9]">
           <ViewTransition name={`project-${project.id}`} share="auto">
             {project.cover_image ? (

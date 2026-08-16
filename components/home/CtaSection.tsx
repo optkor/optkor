@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Button } from "@/components/ui/Button"
 import { AccentBlob } from "@/components/ui/AccentBlob"
+import { MagneticCta } from "@/components/ui/MagneticCta"
 import { Reveal } from "@/components/motion/Reveal"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 
@@ -22,9 +23,11 @@ export function CtaSection({ dict }: { dict: Dictionary }) {
           <p>{dict.home.ctaBody}</p>
         </Reveal>
         <Reveal delay={0.3}>
-          <Button href="/contact" variant="primary" size="lg">
-            {dict.home.ctaButton}
-          </Button>
+          <MagneticCta className="w-fit" cursorLabel={dict.home.ctaButton}>
+            <Button href="/contact" variant="primary" size="lg">
+              {dict.home.ctaButton}
+            </Button>
+          </MagneticCta>
         </Reveal>
       </Container>
     </section>
