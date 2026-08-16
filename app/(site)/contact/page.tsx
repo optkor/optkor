@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { ContactForm } from "@/components/contact/ContactForm"
 import { Reveal } from "@/components/motion/Reveal"
+import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getSiteSettings } from "@/lib/queries/settings"
 import { PACKAGES } from "@/lib/data/packages"
@@ -48,47 +49,47 @@ export default async function ContactPage({
         </Reveal>
       </Container>
 
-      <Container className="grid grid-cols-1 gap-16 border-t border-line pt-16 pb-24 md:pb-32 lg:grid-cols-[1fr_1.4fr]">
-        <div>
-          {settings.contact_email && (
-            <Reveal className="text-sm text-muted">
-              <p>
-                {dict.contact.directEmail}{" "}
-                <a href={`mailto:${settings.contact_email}`} className="text-accent hover:underline">
-                  {settings.contact_email}
-                </a>
-              </p>
-            </Reveal>
-          )}
-          {settings.contact_phone && (
-            <Reveal delay={0.08} className="mt-4 text-sm text-muted">
-              <p>
-                <a href={`tel:${settings.contact_phone}`} className="text-accent hover:underline">
-                  {settings.contact_phone}
-                </a>
-              </p>
-            </Reveal>
-          )}
-          {whatsappHref && (
-            <Reveal delay={0.14} className="mt-4 text-sm text-muted">
-              <p>
-                <a
-                  href={whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-accent hover:underline"
-                >
-                  {dict.packages.whatsapp}
-                </a>
-              </p>
-            </Reveal>
-          )}
-        </div>
+      <SectionCurtain>
+        <Container className="grid grid-cols-1 gap-16 border-t border-line pt-16 pb-24 md:pb-32 lg:grid-cols-[1fr_1.4fr]">
+          <div>
+            {settings.contact_email && (
+              <Reveal className="text-sm text-muted">
+                <p>
+                  {dict.contact.directEmail}{" "}
+                  <a href={`mailto:${settings.contact_email}`} className="text-accent hover:underline">
+                    {settings.contact_email}
+                  </a>
+                </p>
+              </Reveal>
+            )}
+            {settings.contact_phone && (
+              <Reveal delay={0.08} className="mt-4 text-sm text-muted">
+                <p>
+                  <a href={`tel:${settings.contact_phone}`} className="text-accent hover:underline">
+                    {settings.contact_phone}
+                  </a>
+                </p>
+              </Reveal>
+            )}
+            {whatsappHref && (
+              <Reveal delay={0.14} className="mt-4 text-sm text-muted">
+                <p>
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent hover:underline"
+                  >
+                    {dict.packages.whatsapp}
+                  </a>
+                </p>
+              </Reveal>
+            )}
+          </div>
 
-        <Reveal delay={0.15}>
           <ContactForm dict={dict} packageName={packageName} requestingLabel={dict.packages.requestingLabel} />
-        </Reveal>
-      </Container>
+        </Container>
+      </SectionCurtain>
     </ViewTransition>
   )
 }
