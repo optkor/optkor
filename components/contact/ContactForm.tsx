@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, type FocusEvent } from "react"
+import { useEffect, useRef, type FocusEvent } from "react"
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion"
@@ -72,6 +72,21 @@ export function ContactForm({
   function handleBlurCapture() {
     glowOpacity.set(0)
   }
+
+  // Submitting a native <form action={fn}> resets uncontrolled fields to
+  // their defaultValue once the action settles — on a failed submission
+  // that would silently wipe out everything the user typed. Restore the
+  // submitted values (echoed back by the server action) after an error.
+  useEffect(() => {
+    if (state.status !== "error" || !state.values || !formRef.current) return
+    const form = formRef.current
+    for (const [key, value] of Object.entries(state.values)) {
+      const field = form.elements.namedItem(key)
+      if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement) {
+        field.value = value
+      }
+    }
+  }, [state])
 
   if (state.status === "success") {
     return (
