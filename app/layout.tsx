@@ -5,6 +5,7 @@ import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
+import { GsapLenisSync } from "@/components/providers/GsapLenisSync";
 import { CursorProvider } from "@/components/cursor/CursorProvider";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { dirForLocale } from "@/lib/i18n/config";
@@ -76,6 +77,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col bg-ink text-paper">
         <MotionConfig reducedMotion="user">
           <SmoothScrollProvider />
+          <GsapLenisSync />
           <CursorProvider>
             <ToastProvider>{children}</ToastProvider>
           </CursorProvider>
