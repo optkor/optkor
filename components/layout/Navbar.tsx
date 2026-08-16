@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion"
@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils/cn"
 import { Container } from "@/components/ui/Container"
 import { LanguageSwitcher } from "./LanguageSwitcher"
 import { Logo } from "./Logo"
+import { ThemeToggle } from "@/components/theme/ThemeToggle"
+import { useCursor } from "@/components/cursor/CursorContext"
+import { useMagnetic } from "@/hooks/useMagnetic"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 import type { Locale } from "@/lib/i18n/config"
 
@@ -19,6 +22,9 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const [hidden, setHidden] = useState(false)
   const pathname = usePathname()
   const { scrollY } = useScroll()
+  const cursor = useCursor()
+  const magneticRef = useRef<HTMLDivElement>(null)
+  const magnetic = useMagnetic(magneticRef, 0.4)
 
   useMotionValueEvent(scrollY, "change", (current) => {
     const previous = scrollY.getPrevious() ?? current
@@ -70,6 +76,8 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
               <Link
                 key={link.href}
                 href={link.href}
+                onMouseEnter={() => cursor.setCursor("link")}
+                onMouseLeave={() => cursor.resetCursor()}
                 className={cn(
                   "group relative text-xs font-medium uppercase tracking-[0.2em] transition-colors hover:text-accent",
                   pathname === link.href ? "text-accent" : "text-paper"
@@ -88,35 +96,50 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           </nav>
 
           <div className="hidden items-center gap-6 md:flex">
+            <ThemeToggle className="text-paper transition-colors hover:text-accent" />
             <LanguageSwitcher locale={locale} />
-            <Link
-              href="/contact"
-              className="border border-line-strong px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-paper transition-colors hover:border-accent hover:text-accent"
+            <motion.div
+              ref={magneticRef}
+              style={magnetic.style}
+              onMouseMove={magnetic.onMouseMove}
+              onMouseEnter={() => cursor.setCursor("cta")}
+              onMouseLeave={() => {
+                magnetic.onMouseLeave?.()
+                cursor.resetCursor()
+              }}
             >
-              {dict.nav.startProject}
-            </Link>
+              <Link
+                href="/contact"
+                className="border border-line-strong px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-paper transition-colors hover:border-accent hover:text-accent"
+              >
+                {dict.nav.startProject}
+              </Link>
+            </motion.div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
-            className="relative z-10 flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
-          >
-            <span
-              className={cn(
-                "h-px w-6 bg-paper transition-transform duration-300",
-                open && "translate-y-[3.5px] rotate-45"
-              )}
-            />
-            <span
-              className={cn(
-                "h-px w-6 bg-paper transition-transform duration-300",
-                open && "-translate-y-[3.5px] -rotate-45"
-              )}
-            />
-          </button>
+          <div className="flex items-center gap-4 md:hidden">
+            <ThemeToggle className="relative z-10 text-paper" />
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-expanded={open}
+              aria-label={open ? "Close menu" : "Open menu"}
+              className="relative z-10 flex h-10 w-10 flex-col items-center justify-center gap-1.5"
+            >
+              <span
+                className={cn(
+                  "h-px w-6 bg-paper transition-transform duration-300",
+                  open && "translate-y-[3.5px] rotate-45"
+                )}
+              />
+              <span
+                className={cn(
+                  "h-px w-6 bg-paper transition-transform duration-300",
+                  open && "-translate-y-[3.5px] -rotate-45"
+                )}
+              />
+            </button>
+          </div>
         </Container>
       </motion.header>
 

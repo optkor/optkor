@@ -3,6 +3,9 @@ import { Fraunces, Inter, Cairo } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
+import { ThemeScript } from "@/components/theme/ThemeScript";
+import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
+import { CursorProvider } from "@/components/cursor/CursorProvider";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { dirForLocale } from "@/lib/i18n/config";
 import { getSiteSettings } from "@/lib/queries/settings";
@@ -65,10 +68,17 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang={locale}
       dir={dir}
       className={`${fraunces.variable} ${inter.variable} ${cairo.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="flex min-h-full flex-col bg-ink text-paper">
         <MotionConfig reducedMotion="user">
-          <ToastProvider>{children}</ToastProvider>
+          <SmoothScrollProvider />
+          <CursorProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </CursorProvider>
         </MotionConfig>
       </body>
     </html>

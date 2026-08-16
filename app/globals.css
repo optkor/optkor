@@ -1,19 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand palette sampled directly from OPTKOR's social/brand templates. */
-  --color-ink: #030812;
-  --color-ink-2: #0a1420;
-  --color-ink-3: #0f2035;
-  --color-paper: #fbf9e4;
-  --color-paper-dim: #c7c9cf;
-  --color-muted: #8992a3;
-  --color-accent: #0a84ff;
-  --color-accent-soft: #5fb3ff;
-  --color-line: rgba(251, 249, 228, 0.12);
-  --color-line-strong: rgba(251, 249, 228, 0.22);
-  --color-danger: #ff6b57;
-  --color-success: #55c88a;
+  /*
+   * Semantic theme tokens — the actual source of truth for light/dark.
+   * Dark is the default and matches OPTKOR's established brand palette
+   * exactly (sampled from the brand's social/brand templates). Light is a
+   * premium inversion of the SAME identity, not a new palette: same navy,
+   * same cream, same accent blue, just which one is background vs
+   * foreground.
+   */
+  --bg: #030812;
+  --bg-2: #0a1420;
+  --bg-3: #0f2035;
+  --fg: #fbf9e4;
+  --fg-dim: #c7c9cf;
+  --fg-muted: #8992a3;
+  --accent: #0a84ff;
+  --accent-soft: #5fb3ff;
+  --border: rgba(251, 249, 228, 0.12);
+  --border-strong: rgba(251, 249, 228, 0.22);
+  --danger: #ff6b57;
+  --success: #55c88a;
+  --overlay: rgba(3, 8, 18, 0.72);
+
+  /*
+   * Back-compat aliases: every existing bg-ink / text-paper / border-line
+   * utility class across the codebase reads through these, so the whole
+   * site re-themes on `data-theme` change with zero component edits.
+   */
+  --color-ink: var(--bg);
+  --color-ink-2: var(--bg-2);
+  --color-ink-3: var(--bg-3);
+  --color-paper: var(--fg);
+  --color-paper-dim: var(--fg-dim);
+  --color-muted: var(--fg-muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
 
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-sans: var(--font-inter), "Segoe UI", Arial, sans-serif;
@@ -31,6 +57,27 @@
   /* Editorial type tiers beyond Heading's existing display/xl/lg/md/sm scale. */
   --text-hero: clamp(3.25rem, 9vw, 8.5rem);
   --text-micro: 0.6875rem;
+}
+
+/*
+ * Light mode — same identity, inverted. The accent is deepened slightly
+ * (#0a84ff -> #0a6fd6) to hold AA contrast against a cream background;
+ * everything else is the same brand color reassigned to the other role.
+ */
+:root[data-theme="light"] {
+  --bg: #fbf9e4;
+  --bg-2: #f2efd9;
+  --bg-3: #e9e5c9;
+  --fg: #030812;
+  --fg-dim: #33404f;
+  --fg-muted: #5b6472;
+  --accent: #0a6fd6;
+  --accent-soft: #3d94ff;
+  --border: rgba(3, 8, 18, 0.1);
+  --border-strong: rgba(3, 8, 18, 0.18);
+  --danger: #c8402c;
+  --success: #1f8f5f;
+  --overlay: rgba(251, 249, 228, 0.72);
 }
 
 @theme inline {
@@ -77,10 +124,45 @@ html {
   color-scheme: dark;
 }
 
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
 body {
   background: var(--color-ink);
   color: var(--color-paper);
   font-family: var(--font-sans);
+  /* Theme toggle repaints the base background/text smoothly instead of
+     snapping. Scoped to body only (not a global `*` rule) so it can't
+     fight components' own hover/focus transition-colors utilities or
+     cause a color "fade in" flash on first paint. Motion-safe: plain
+     color, not movement, so left out of the reduced-motion block below
+     on purpose. */
+  transition:
+    background-color 0.3s var(--ease-soft),
+    color 0.3s var(--ease-soft);
+}
+
+/* Custom cursor — only applied on fine-pointer/hover-capable devices with
+   no reduced-motion preference (see CursorProvider). Text fields keep the
+   native I-beam since that's a meaningful affordance, not decoration. */
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
+.custom-cursor-active input,
+.custom-cursor-active textarea,
+.custom-cursor-active select {
+  cursor: auto !important;
+}
+
+/* Lenis smooth scroll (JS-driven; disabled on touch/reduced-motion, see
+   components/providers/SmoothScrollProvider.tsx). Native scroll otherwise. */
+html.lenis {
+  scroll-behavior: auto;
+}
+html.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 [dir="rtl"] body {
