@@ -1,4 +1,5 @@
 import { ProjectCard } from "./ProjectCard"
+import { ProjectFeature } from "./ProjectFeature"
 import { EmptyState } from "@/components/ui/States"
 import type { Project } from "@/lib/supabase/types"
 
@@ -16,25 +17,38 @@ export function ProjectGrid({
   projects,
   emptyTitle = "No work yet",
   emptyBody,
+  feature = false,
 }: {
   projects: Project[]
   emptyTitle?: string
   emptyBody?: string
+  /** Give the first project a full-bleed lead treatment. */
+  feature?: boolean
 }) {
   if (projects.length === 0) {
     return <EmptyState title={emptyTitle} body={emptyBody} />
   }
 
+  const [lead, ...rest] = projects
+  const showFeature = feature && Boolean(lead)
+  const gridProjects = showFeature ? rest : projects
+
   return (
-    <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-6">
-      {projects.map((project, index) => {
-        const { col, aspect } = RHYTHM[index % RHYTHM.length]
-        return (
-          <div key={project.id} className={col}>
-            <ProjectCard project={project} index={index} aspect={aspect} />
-          </div>
-        )
-      })}
+    <div className="flex flex-col gap-16">
+      {showFeature && <ProjectFeature project={lead} />}
+
+      {gridProjects.length > 0 && (
+        <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-6">
+          {gridProjects.map((project, index) => {
+            const { col, aspect } = RHYTHM[index % RHYTHM.length]
+            return (
+              <div key={project.id} className={col}>
+                <ProjectCard project={project} index={index} aspect={aspect} />
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

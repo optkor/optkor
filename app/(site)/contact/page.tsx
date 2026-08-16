@@ -6,48 +6,88 @@ import { ContactForm } from "@/components/contact/ContactForm"
 import { Reveal } from "@/components/motion/Reveal"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getSiteSettings } from "@/lib/queries/settings"
+import { PACKAGES } from "@/lib/data/packages"
 
 export const metadata: Metadata = {
   title: "Contact",
   description: "Start a production project with OPTKOR.",
 }
 
-export default async function ContactPage() {
-  const [{ dict }, { data: settings }] = await Promise.all([getDictionary(), getSiteSettings()])
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ package?: string }>
+}) {
+  const [{ dict }, { data: settings }, { package: packageSlug }] = await Promise.all([
+    getDictionary(),
+    getSiteSettings(),
+    searchParams,
+  ])
+
+  const tierNames = [dict.packages.tier1Name, dict.packages.tier2Name, dict.packages.tier3Name]
+  const packageIndex = PACKAGES.findIndex((tier) => tier.slug === packageSlug)
+  const packageName = packageIndex >= 0 ? tierNames[packageIndex] : null
+
+  const whatsappHref = settings.contact_phone
+    ? `https://wa.me/${settings.contact_phone.replace(/\D/g, "")}`
+    : null
 
   return (
     <ViewTransition>
-      <Container className="py-24 md:py-32">
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_1.4fr]">
-          <div>
-            <Reveal>
-              <Eyebrow>{dict.contact.eyebrow}</Eyebrow>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <Heading as="h1" size="xl" className="mt-6">
-                {dict.contact.title}
-              </Heading>
-            </Reveal>
-            <Reveal delay={0.18} className="mt-4 max-w-sm text-base text-paper-dim">
-              <p>{dict.contact.subtitle}</p>
-            </Reveal>
+      <Container className="pt-24 pb-16 md:pt-32 md:pb-20">
+        <Reveal>
+          <Eyebrow>{dict.contact.eyebrow}</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <Heading as="h1" size="display" className="mt-6 max-w-3xl">
+            {dict.contact.title}
+          </Heading>
+        </Reveal>
+        <Reveal delay={0.18} className="mt-6 max-w-md text-base text-paper-dim md:text-lg">
+          <p>{dict.contact.subtitle}</p>
+        </Reveal>
+      </Container>
 
-            {settings.contact_email && (
-              <Reveal delay={0.26} className="mt-10 text-sm text-muted">
-                <p>
-                  {dict.contact.directEmail}{" "}
-                  <a href={`mailto:${settings.contact_email}`} className="text-accent hover:underline">
-                    {settings.contact_email}
-                  </a>
-                </p>
-              </Reveal>
-            )}
-          </div>
-
-          <Reveal delay={0.15}>
-            <ContactForm dict={dict} />
-          </Reveal>
+      <Container className="grid grid-cols-1 gap-16 border-t border-line pt-16 pb-24 md:pb-32 lg:grid-cols-[1fr_1.4fr]">
+        <div>
+          {settings.contact_email && (
+            <Reveal className="text-sm text-muted">
+              <p>
+                {dict.contact.directEmail}{" "}
+                <a href={`mailto:${settings.contact_email}`} className="text-accent hover:underline">
+                  {settings.contact_email}
+                </a>
+              </p>
+            </Reveal>
+          )}
+          {settings.contact_phone && (
+            <Reveal delay={0.08} className="mt-4 text-sm text-muted">
+              <p>
+                <a href={`tel:${settings.contact_phone}`} className="text-accent hover:underline">
+                  {settings.contact_phone}
+                </a>
+              </p>
+            </Reveal>
+          )}
+          {whatsappHref && (
+            <Reveal delay={0.14} className="mt-4 text-sm text-muted">
+              <p>
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:underline"
+                >
+                  {dict.packages.whatsapp}
+                </a>
+              </p>
+            </Reveal>
+          )}
         </div>
+
+        <Reveal delay={0.15}>
+          <ContactForm dict={dict} packageName={packageName} requestingLabel={dict.packages.requestingLabel} />
+        </Reveal>
       </Container>
     </ViewTransition>
   )

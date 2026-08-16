@@ -2,6 +2,7 @@ const en = {
   nav: {
     work: "Work",
     services: "Services",
+    packages: "Packages",
     about: "About",
     contact: "Contact",
     startProject: "Start a Project",
@@ -113,6 +114,24 @@ const en = {
       craft: "Craft",
       craftBody: "Production discipline behind every deliverable.",
     },
+  },
+  packages: {
+    eyebrow: "Packages",
+    title: "Ongoing Creative Partnerships",
+    subtitle:
+      "A monthly production partnership — a different commitment from a single Start a Project brief.",
+    requestCta: "Request This Package",
+    requestingLabel: "Requesting",
+    whatsapp: "WhatsApp",
+    tier1Name: "Creative Support",
+    tier1Badge: "",
+    tier1Positioning: "Accessible, flexible creative support for teams that need it on demand.",
+    tier2Name: "Brand & Visual Execution",
+    tier2Badge: "Core / Most Popular",
+    tier2Positioning: "The natural choice for an ongoing, serious production partnership.",
+    tier3Name: "Visual Production Partner",
+    tier3Badge: "Premium",
+    tier3Positioning: "Full-scale visual production, embedded as an extension of your team.",
   },
   contact: {
     eyebrow: "Contact",

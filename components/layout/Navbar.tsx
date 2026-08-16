@@ -33,6 +33,7 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const links = [
     { href: "/work", label: dict.nav.work },
     { href: "/services", label: dict.nav.services },
+    { href: "/packages", label: dict.nav.packages },
     { href: "/about", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ]

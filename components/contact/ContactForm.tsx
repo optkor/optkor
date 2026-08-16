@@ -19,7 +19,15 @@ function SubmitButton({ dict }: { dict: Dictionary }) {
   )
 }
 
-export function ContactForm({ dict }: { dict: Dictionary }) {
+export function ContactForm({
+  dict,
+  packageName,
+  requestingLabel,
+}: {
+  dict: Dictionary
+  packageName?: string | null
+  requestingLabel?: string
+}) {
   const [state, formAction] = useActionState(submitContactMessage, initialState)
 
   if (state.status === "success") {
@@ -39,6 +47,12 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
         <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
+      {packageName && (
+        <p className="inline-flex w-fit items-center gap-2 border border-accent/30 px-4 py-2 text-xs uppercase tracking-wider text-accent">
+          {requestingLabel}: {packageName}
+        </p>
+      )}
+
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <FormField label={dict.contact.formName} htmlFor="name" required error={state.fieldErrors?.name?.[0]}>
           <Input id="name" name="name" required maxLength={200} />
@@ -55,7 +69,12 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
       </div>
 
       <FormField label={dict.contact.formSubject} htmlFor="subject" error={state.fieldErrors?.subject?.[0]}>
-        <Input id="subject" name="subject" maxLength={300} />
+        <Input
+          id="subject"
+          name="subject"
+          maxLength={300}
+          defaultValue={packageName ? `Package inquiry: ${packageName}` : undefined}
+        />
       </FormField>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">

@@ -45,7 +45,7 @@ export default async function HomePage() {
             </div>
 
             <div className="mt-16">
-              <ProjectGrid projects={projects} />
+              <ProjectGrid projects={projects} feature />
             </div>
           </Container>
         </section>

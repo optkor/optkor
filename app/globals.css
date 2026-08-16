@@ -110,6 +110,31 @@ body {
     );
 }
 
+/* Seamless capability marquee — plain CSS so the global reduced-motion
+   override below (animation-duration: 0.01ms) freezes it automatically. */
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+[dir="rtl"] .marquee-track {
+  animation-name: marquee-rtl;
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
