@@ -3,7 +3,8 @@ import { ViewTransition } from "react"
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Reveal } from "@/components/motion/Reveal"
-import { PackageCard } from "@/components/packages/PackageCard"
+import { SectionCurtain } from "@/components/motion/SectionCurtain"
+import { PackagesGrid } from "@/components/packages/PackagesGrid"
 import { PACKAGES } from "@/lib/data/packages"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getSiteSettings } from "@/lib/queries/settings"
@@ -54,42 +55,34 @@ export default async function PackagesPage() {
         </Reveal>
       </Container>
 
-      <Container className="pb-24 md:pb-32">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {PACKAGES.map((tier, index) => (
-            <PackageCard
-              key={tier.slug}
-              tier={tier}
-              delay={Math.min(index * 0.08, 0.3)}
-              requestLabel={dict.packages.requestCta}
-              {...tierContent[index]}
-            />
-          ))}
-        </div>
+      <SectionCurtain>
+        <Container className="pb-24 md:pb-32">
+          <PackagesGrid tiers={PACKAGES} tierContent={tierContent} requestLabel={dict.packages.requestCta} />
 
-        {(settings.contact_email || whatsappHref) && (
-          <Reveal
-            delay={0.3}
-            className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-line pt-10 text-sm"
-          >
-            {settings.contact_email && (
-              <a href={`mailto:${settings.contact_email}`} className="text-paper hover:text-accent">
-                {settings.contact_email}
-              </a>
-            )}
-            {whatsappHref && (
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-paper hover:text-accent"
-              >
-                {dict.packages.whatsapp}
-              </a>
-            )}
-          </Reveal>
-        )}
-      </Container>
+          {(settings.contact_email || whatsappHref) && (
+            <Reveal
+              delay={0.3}
+              className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-line pt-10 text-sm"
+            >
+              {settings.contact_email && (
+                <a href={`mailto:${settings.contact_email}`} className="text-paper hover:text-accent">
+                  {settings.contact_email}
+                </a>
+              )}
+              {whatsappHref && (
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-paper hover:text-accent"
+                >
+                  {dict.packages.whatsapp}
+                </a>
+              )}
+            </Reveal>
+          )}
+        </Container>
+      </SectionCurtain>
     </ViewTransition>
   )
 }
