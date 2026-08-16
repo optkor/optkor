@@ -1,9 +1,13 @@
 "use client"
 
+import { useRef } from "react"
 import Link from "next/link"
+import { useReducedMotion } from "framer-motion"
+import { useGSAP } from "@gsap/react"
 import { Container } from "@/components/ui/Container"
 import { Logo } from "./Logo"
 import { useCursor } from "@/components/cursor/CursorContext"
+import { gsap } from "@/lib/motion/gsap"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 import type { SiteSettings } from "@/lib/supabase/types"
 
@@ -21,8 +25,40 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
     onMouseLeave: () => cursor.resetCursor(),
   }
 
+  const shouldReduceMotion = useReducedMotion()
+  const footerRef = useRef<HTMLElement>(null)
+  const markRef = useRef<HTMLParagraphElement>(null)
+
+  // The final scene: the giant wordmark wipes into view and keeps drifting
+  // gently while the footer is on screen, instead of just being there.
+  useGSAP(
+    () => {
+      if (shouldReduceMotion || !footerRef.current || !markRef.current) return
+      const isRtl = getComputedStyle(document.documentElement).direction === "rtl"
+      gsap.fromTo(
+        markRef.current,
+        { clipPath: isRtl ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)" },
+        {
+          clipPath: "inset(0 0% 0 0)",
+          ease: "none",
+          scrollTrigger: { trigger: markRef.current, start: "top 95%", end: "top 55%", scrub: 0.5 },
+        }
+      )
+      gsap.fromTo(
+        markRef.current,
+        { xPercent: -3 },
+        {
+          xPercent: 3,
+          ease: "none",
+          scrollTrigger: { trigger: footerRef.current, start: "top bottom", end: "bottom bottom", scrub: true },
+        }
+      )
+    },
+    { scope: footerRef, dependencies: [shouldReduceMotion] }
+  )
+
   return (
-    <footer className="relative overflow-hidden border-t border-line">
+    <footer ref={footerRef} className="relative overflow-hidden border-t border-line">
       <div
         aria-hidden
         className="pointer-events-none absolute -right-24 -top-32 h-64 w-64 rounded-full bg-accent/10 blur-3xl"
@@ -97,9 +133,10 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
         </div>
       </Container>
 
-      <div className="border-t border-line py-8 md:py-12">
+      <div className="overflow-hidden border-t border-line py-8 md:py-12">
         <Container>
           <p
+            ref={markRef}
             aria-hidden
             className="font-display select-none text-center text-[clamp(3rem,14vw,11rem)] leading-none tracking-tight text-paper-dim/10"
           >
