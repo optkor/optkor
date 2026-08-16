@@ -6,6 +6,7 @@ import { ServiceIndex } from "@/components/services/ServiceIndex"
 import { ErrorState } from "@/components/ui/States"
 import { EmptyStateHero } from "@/components/ui/EmptyStateHero"
 import { Reveal } from "@/components/motion/Reveal"
+import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getPublishedServices } from "@/lib/queries/services"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
@@ -42,11 +43,15 @@ export default async function ServicesPage() {
           <ErrorState body={dict.common.somethingWrong} />
         </Container>
       ) : services.length === 0 ? (
-        <EmptyStateHero className="border-t border-line" eyebrow={dict.services.eyebrow} title={dict.services.empty} />
+        <SectionCurtain>
+          <EmptyStateHero className="border-t border-line" eyebrow={dict.services.eyebrow} title={dict.services.empty} />
+        </SectionCurtain>
       ) : (
-        <Container className="pb-24 md:pb-32">
-          <ServiceIndex services={services} exploreLabel={dict.common.explore} />
-        </Container>
+        <SectionCurtain>
+          <Container className="pb-24 md:pb-32">
+            <ServiceIndex services={services} exploreLabel={dict.common.explore} />
+          </Container>
+        </SectionCurtain>
       )}
     </ViewTransition>
   )
