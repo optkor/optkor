@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from "react"
 
-export type CursorVariant = "default" | "link" | "project" | "cta"
+export type CursorVariant = "default" | "link" | "project" | "cta" | "scroll"
 
 export type CursorContextValue = {
   setCursor: (variant: CursorVariant, label?: string) => void

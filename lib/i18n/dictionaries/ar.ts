@@ -30,6 +30,7 @@ const ar = {
     all: "الكل",
     viewProject: "عرض المشروع",
     explore: "استكشف",
+    scroll: "مرر للأسفل",
   },
   home: {
     heroEyebrow: "إنتاج بصري لشركات B2B",

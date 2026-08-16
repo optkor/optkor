@@ -10,6 +10,7 @@ const SIZES: Record<CursorVariant, number> = {
   link: 44,
   project: 96,
   cta: 56,
+  scroll: 64,
 }
 
 export function CursorProvider({ children }: { children: React.ReactNode }) {

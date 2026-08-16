@@ -28,6 +28,7 @@ const en = {
     all: "All",
     viewProject: "View Project",
     explore: "Explore",
+    scroll: "Scroll",
   },
   home: {
     heroEyebrow: "B2B Visual Production",

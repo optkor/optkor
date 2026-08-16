@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react"
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Reveal } from "@/components/motion/Reveal"
+import { useCursor } from "@/components/cursor/CursorContext"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { gsap } from "@/lib/motion/gsap"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
@@ -22,6 +23,7 @@ export function Process({ dict }: { dict: Dictionary }) {
   const shouldReduceMotion = useReducedMotion()
   const isDesktop = useMediaQuery("(min-width: 1024px)")
   const journeyEnabled = isDesktop && !shouldReduceMotion
+  const cursor = useCursor()
 
   const pinRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -84,7 +86,12 @@ export function Process({ dict }: { dict: Dictionary }) {
 
       {/* Desktop pinned horizontal journey */}
       {journeyEnabled ? (
-        <div ref={pinRef} className="relative mt-16 hidden h-screen overflow-hidden lg:block">
+        <div
+          ref={pinRef}
+          onMouseEnter={() => cursor.setCursor("scroll", dict.common.scroll)}
+          onMouseLeave={() => cursor.resetCursor()}
+          className="relative mt-16 hidden h-screen overflow-hidden lg:block"
+        >
           <div className="absolute inset-x-0 top-0">
             <Container>
               <span aria-hidden className="relative block h-px w-full bg-line">
