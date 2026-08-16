@@ -4,10 +4,11 @@ import { ViewTransition } from "react"
 import Link from "next/link"
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
-import { SafeImage } from "@/components/ui/Media"
 import { MediaGallery } from "@/components/work/MediaGallery"
 import { ProjectGrid } from "@/components/work/ProjectGrid"
 import { Reveal } from "@/components/motion/Reveal"
+import { SectionCurtain } from "@/components/motion/SectionCurtain"
+import { CaseStudyHeroImage } from "@/components/work/CaseStudyHeroImage"
 import { getProjectBySlug, getRelatedProjects } from "@/lib/queries/projects"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
@@ -66,11 +67,11 @@ export default async function CaseStudyPage({ params }: Props) {
               {[project.category, project.year].filter(Boolean).join(" · ") || dict.caseStudy.category}
             </Eyebrow>
           </Reveal>
-          <Reveal delay={0.18}>
+          <ViewTransition name={`project-title-${project.id}`} share="auto">
             <Heading as="h1" size="display" className="mt-6 max-w-4xl">
               {project.title}
             </Heading>
-          </Reveal>
+          </ViewTransition>
 
           <Reveal
             delay={0.28}
@@ -100,18 +101,11 @@ export default async function CaseStudyPage({ params }: Props) {
         </Container>
 
         {project.cover_image && (
-          <div className="relative mt-16 aspect-[16/9] w-full bg-ink-3">
-            <ViewTransition name={`project-${project.id}`} share="auto">
-              <SafeImage
-                src={project.cover_image}
-                alt={project.title}
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-              />
-            </ViewTransition>
-          </div>
+          <CaseStudyHeroImage
+            src={project.cover_image}
+            alt={project.title}
+            transitionName={`project-${project.id}`}
+          />
         )}
 
         <Container className="py-16 md:py-24">
@@ -132,12 +126,14 @@ export default async function CaseStudyPage({ params }: Props) {
         </Container>
 
         {related && related.length > 0 && (
-          <Container className="border-t border-line py-24">
-            <Eyebrow>{dict.caseStudy.related}</Eyebrow>
-            <div className="mt-10">
-              <ProjectGrid projects={related} viewLabel={dict.common.viewProject} />
-            </div>
-          </Container>
+          <SectionCurtain>
+            <Container className="border-t border-line py-24">
+              <Eyebrow>{dict.caseStudy.related}</Eyebrow>
+              <div className="mt-10">
+                <ProjectGrid projects={related} viewLabel={dict.common.viewProject} />
+              </div>
+            </Container>
+          </SectionCurtain>
         )}
       </article>
     </ViewTransition>

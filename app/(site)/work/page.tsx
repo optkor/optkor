@@ -6,6 +6,7 @@ import { ProjectGrid } from "@/components/work/ProjectGrid"
 import { WorkFilter } from "@/components/work/WorkFilter"
 import { ErrorState } from "@/components/ui/States"
 import { EmptyStateHero } from "@/components/ui/EmptyStateHero"
+import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getPublishedProjects, getProjectCategories } from "@/lib/queries/projects"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
@@ -56,11 +57,15 @@ export default async function WorkPage({
           <ErrorState body={dict.common.somethingWrong} />
         </Container>
       ) : projects.length > 0 ? (
-        <Container className="pb-24 md:pb-32">
-          <ProjectGrid projects={projects} feature viewLabel={dict.common.viewProject} />
-        </Container>
+        <SectionCurtain>
+          <Container className="pb-24 md:pb-32">
+            <ProjectGrid projects={projects} feature viewLabel={dict.common.viewProject} />
+          </Container>
+        </SectionCurtain>
       ) : (
-        <EmptyStateHero className="border-t border-line" eyebrow={dict.work.eyebrow} title={dict.work.empty} />
+        <SectionCurtain>
+          <EmptyStateHero className="border-t border-line" eyebrow={dict.work.eyebrow} title={dict.work.empty} />
+        </SectionCurtain>
       )}
     </ViewTransition>
   )
