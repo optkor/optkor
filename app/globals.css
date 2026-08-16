@@ -273,6 +273,36 @@ html.lenis-scrolling iframe {
   }
 }
 
+/* Default transition for every other route change (Home/Services/Packages/
+   Contact/About/etc.) — a mask wipe echoing the SectionCurtain scroll
+   transition, so navigation reads as the same visual language rather than
+   the browser's plain crossfade. */
+::view-transition-old(.page-transition) {
+  animation: var(--duration-exit) ease-in both via-page-out;
+}
+::view-transition-new(.page-transition) {
+  animation: var(--duration-move) ease-out both via-page-in;
+}
+@keyframes via-page-out {
+  to {
+    clip-path: inset(0 0 0 0 round 24px);
+    scale: 0.97;
+    opacity: 0;
+  }
+}
+@keyframes via-page-in {
+  from {
+    clip-path: inset(4% round 24px);
+    scale: 0.98;
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0% round 0px);
+    scale: 1;
+    opacity: 1;
+  }
+}
+
 /* Directional route slides between /work and /work/[slug]. */
 ::view-transition-old(.nav-forward) {
   --slide-offset: -60px;

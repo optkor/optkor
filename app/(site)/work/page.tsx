@@ -32,9 +32,9 @@ export default async function WorkPage({
 
   return (
     <ViewTransition
-      enter={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" }}
-      exit={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" }}
-      default="none"
+      enter={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "page-transition" }}
+      exit={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "page-transition" }}
+      default="page-transition"
     >
       <Container className="pt-24 pb-16 md:pt-32 md:pb-20">
         <Eyebrow>{dict.work.eyebrow}</Eyebrow>

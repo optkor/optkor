@@ -23,7 +23,7 @@ export default async function ServicesPage() {
   const services = data ?? []
 
   return (
-    <ViewTransition>
+    <ViewTransition default="page-transition">
       <Container className="pt-24 pb-16 md:pt-32 md:pb-20">
         <Reveal>
           <Eyebrow>{dict.services.eyebrow}</Eyebrow>

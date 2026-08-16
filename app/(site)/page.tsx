@@ -21,7 +21,7 @@ export default async function HomePage() {
   ])
 
   return (
-    <ViewTransition>
+    <ViewTransition default="page-transition">
       <Hero dict={dict} />
 
       {error ? (

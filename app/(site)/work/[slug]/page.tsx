@@ -17,7 +17,7 @@ type Props = { params: Promise<{ slug: string }> }
 const transition = {
   "nav-forward": "nav-forward",
   "nav-back": "nav-back",
-  default: "none",
+  default: "page-transition",
 } as const
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

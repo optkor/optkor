@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Button } from "@/components/ui/Button"
 import { Reveal } from "@/components/motion/Reveal"
+import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default async function AboutPage() {
   }, [])
 
   return (
-    <ViewTransition>
+    <ViewTransition default="page-transition">
       <Container className="py-24 md:py-32">
         <Reveal>
           <Eyebrow>{dict.about.eyebrow}</Eyebrow>
@@ -45,38 +46,42 @@ export default async function AboutPage() {
         </div>
       </Container>
 
-      <section className="border-t border-line py-24">
-        <Container>
-          <Reveal>
-            <Heading as="h2" size="lg" className="max-w-xl">
-              {dict.about.valuesTitle}
-            </Heading>
-          </Reveal>
-          <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-12 border-t border-line pt-12 sm:grid-cols-2">
-            {values.map((value, index) => (
-              <Reveal key={value.key} delay={Math.min(index * 0.08, 0.32)}>
-                <h3 className="font-display text-xl text-accent">{value.title}</h3>
-                <p className="mt-2 text-sm text-muted">{value.body}</p>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
+      <SectionCurtain>
+        <section className="border-t border-line py-24">
+          <Container>
+            <Reveal>
+              <Heading as="h2" size="lg" className="max-w-xl">
+                {dict.about.valuesTitle}
+              </Heading>
+            </Reveal>
+            <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-12 border-t border-line pt-12 sm:grid-cols-2">
+              {values.map((value, index) => (
+                <Reveal key={value.key} delay={Math.min(index * 0.08, 0.32)}>
+                  <h3 className="font-display text-xl text-accent">{value.title}</h3>
+                  <p className="mt-2 text-sm text-muted">{value.body}</p>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+      </SectionCurtain>
 
-      <section className="field-grain border-t border-line py-24">
-        <Container className="flex flex-col items-start gap-6">
-          <Reveal>
-            <Heading as="h2" size="lg" className="max-w-xl">
-              {dict.home.ctaTitle}
-            </Heading>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <Button href="/contact" size="lg">
-              {dict.home.ctaButton}
-            </Button>
-          </Reveal>
-        </Container>
-      </section>
+      <SectionCurtain>
+        <section className="field-grain border-t border-line py-24">
+          <Container className="flex flex-col items-start gap-6">
+            <Reveal>
+              <Heading as="h2" size="lg" className="max-w-xl">
+                {dict.home.ctaTitle}
+              </Heading>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <Button href="/contact" size="lg">
+                {dict.home.ctaButton}
+              </Button>
+            </Reveal>
+          </Container>
+        </section>
+      </SectionCurtain>
     </ViewTransition>
   )
 }
