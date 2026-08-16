@@ -143,6 +143,26 @@ body {
     color 0.3s var(--ease-soft);
 }
 
+/* Hero text-safety scrim — pulls the WebGL/grain field toward the theme's
+   own background color under the headline so legibility never depends on
+   where the animated field happens to be at a given moment. Symmetric
+   (not left/right), so it needs no RTL variant. */
+.hero-scrim {
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    color-mix(in oklab, var(--color-ink) 60%, transparent),
+    transparent 72%
+  );
+}
+
+/* The brand mark PNG is a light (cream) asset made for dark backgrounds.
+   In light mode the same pixels would nearly disappear against a cream
+   page, so it's inverted — cream inverts to a navy close to the real
+   brand ink, not an arbitrary color choice. */
+:root[data-theme="light"] .theme-invert-light {
+  filter: invert(1);
+}
+
 /* Custom cursor — only applied on fine-pointer/hover-capable devices with
    no reduced-motion preference (see CursorProvider). Text fields keep the
    native I-beam since that's a meaningful affordance, not decoration. */
