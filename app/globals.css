@@ -19,6 +19,18 @@
   --font-sans: var(--font-inter), "Segoe UI", Arial, sans-serif;
   --font-arabic-display: var(--font-cairo), var(--font-fraunces), Tahoma, sans-serif;
   --font-arabic-sans: var(--font-cairo), var(--font-inter), Tahoma, sans-serif;
+
+  /* Shared motion vocabulary — kept as CSS vars so Framer Motion configs
+     and native View Transition keyframes stay in sync. */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-exit: 180ms;
+  --duration-enter: 260ms;
+  --duration-move: 450ms;
+
+  /* Editorial type tiers beyond Heading's existing display/xl/lg/md/sm scale. */
+  --text-hero: clamp(3.25rem, 9vw, 8.5rem);
+  --text-micro: 0.6875rem;
 }
 
 @theme inline {
@@ -112,4 +124,97 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* --- Native View Transitions (Next.js 16 / React canary) ---
+   See node_modules/next/dist/docs/01-app/02-guides/view-transitions.md */
+
+::view-transition {
+  pointer-events: none;
+}
+
+/* Shared-element morph: work grid thumbnail -> case study hero image. */
+::view-transition-group(.morph) {
+  animation-duration: var(--duration-move);
+}
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+@keyframes via-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+/* Directional route slides between /work and /work/[slug]. */
+::view-transition-old(.nav-forward) {
+  --slide-offset: -60px;
+  animation:
+    var(--duration-exit) ease-in both via-fade reverse,
+    var(--duration-move) ease-in-out both via-slide reverse;
+}
+::view-transition-new(.nav-forward) {
+  --slide-offset: 60px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both via-fade,
+    var(--duration-move) ease-in-out both via-slide;
+}
+::view-transition-old(.nav-back) {
+  --slide-offset: 60px;
+  animation:
+    var(--duration-exit) ease-in both via-fade reverse,
+    var(--duration-move) ease-in-out both via-slide reverse;
+}
+::view-transition-new(.nav-back) {
+  --slide-offset: -60px;
+  animation:
+    var(--duration-enter) ease-out var(--duration-exit) both via-fade,
+    var(--duration-move) ease-in-out both via-slide;
+}
+/* Mirror slide direction in RTL so "forward" still reads as forward. */
+[dir="rtl"] ::view-transition-old(.nav-forward),
+[dir="rtl"] ::view-transition-new(.nav-back) {
+  --slide-offset: 60px;
+}
+[dir="rtl"] ::view-transition-new(.nav-forward),
+[dir="rtl"] ::view-transition-old(.nav-back) {
+  --slide-offset: -60px;
+}
+@keyframes via-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes via-slide {
+  from {
+    translate: var(--slide-offset);
+  }
+  to {
+    translate: 0;
+  }
+}
+
+/* Keep the header fixed while route content slides. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }

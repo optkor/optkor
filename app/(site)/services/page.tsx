@@ -1,8 +1,11 @@
 import type { Metadata } from "next"
+import { ViewTransition } from "react"
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
-import { ServiceCard } from "@/components/services/ServiceCard"
-import { EmptyState, ErrorState } from "@/components/ui/States"
+import { ServiceIndex } from "@/components/services/ServiceIndex"
+import { ErrorState } from "@/components/ui/States"
+import { EmptyStateHero } from "@/components/ui/EmptyStateHero"
+import { Reveal } from "@/components/motion/Reveal"
 import { getPublishedServices } from "@/lib/queries/services"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
@@ -19,26 +22,32 @@ export default async function ServicesPage() {
   const services = data ?? []
 
   return (
-    <Container className="py-24 md:py-32">
-      <Eyebrow>{dict.services.eyebrow}</Eyebrow>
-      <Heading as="h1" size="xl" className="mt-6 max-w-2xl">
-        {dict.services.title}
-      </Heading>
-      <p className="mt-4 max-w-xl text-base text-paper-dim">{dict.services.subtitle}</p>
+    <ViewTransition>
+      <Container className="pt-24 pb-16 md:pt-32 md:pb-20">
+        <Reveal>
+          <Eyebrow>{dict.services.eyebrow}</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <Heading as="h1" size="xl" className="mt-6 max-w-2xl">
+            {dict.services.title}
+          </Heading>
+        </Reveal>
+        <Reveal delay={0.18} className="mt-4 max-w-xl text-base text-paper-dim">
+          <p>{dict.services.subtitle}</p>
+        </Reveal>
+      </Container>
 
-      <div className="mt-16">
-        {error ? (
+      {error ? (
+        <Container className="pb-24 md:pb-32">
           <ErrorState body={dict.common.somethingWrong} />
-        ) : services.length === 0 ? (
-          <EmptyState title={dict.services.empty} />
-        ) : (
-          <div>
-            {services.map((service, index) => (
-              <ServiceCard key={service.id} service={service} index={index} />
-            ))}
-          </div>
-        )}
-      </div>
-    </Container>
+        </Container>
+      ) : services.length === 0 ? (
+        <EmptyStateHero className="border-t border-line" eyebrow={dict.services.eyebrow} title={dict.services.empty} />
+      ) : (
+        <Container className="pb-24 md:pb-32">
+          <ServiceIndex services={services} />
+        </Container>
+      )}
+    </ViewTransition>
   )
 }

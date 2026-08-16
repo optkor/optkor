@@ -29,7 +29,7 @@ export function FormField({ label, htmlFor, required, error, hint, className, ch
 }
 
 const fieldBase =
-  "w-full rounded-none border border-line-strong bg-transparent px-4 py-3 text-sm text-paper placeholder:text-muted transition-colors focus:border-accent focus:outline-none disabled:opacity-40"
+  "w-full rounded-none border border-line-strong bg-transparent px-4 py-3 text-sm text-paper placeholder:text-muted transition-colors duration-300 focus:border-accent focus:outline-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 disabled:opacity-40"
 
 export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldBase, className)} {...props} />

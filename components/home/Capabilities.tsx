@@ -1,8 +1,6 @@
-"use client"
-
-import { motion } from "framer-motion"
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
+import { Reveal } from "@/components/motion/Reveal"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 
 export function Capabilities({ dict }: { dict: Dictionary }) {
@@ -11,25 +9,32 @@ export function Capabilities({ dict }: { dict: Dictionary }) {
   return (
     <section className="border-t border-line py-24 md:py-32">
       <Container>
-        <Eyebrow>{dict.home.capabilitiesEyebrow}</Eyebrow>
-        <Heading as="h2" size="xl" className="mt-6 max-w-2xl">
-          {dict.home.capabilitiesTitle}
-        </Heading>
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.6fr] lg:items-start lg:gap-16">
+          <div className="lg:sticky lg:top-32">
+            <Reveal>
+              <Eyebrow>{dict.home.capabilitiesEyebrow}</Eyebrow>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <Heading as="h2" size="xl" className="mt-6 max-w-sm">
+                {dict.home.capabilitiesTitle}
+              </Heading>
+            </Reveal>
+          </div>
 
-        <div className="mt-16 grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((item, index) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.3) }}
-              className="border-b border-r border-line px-6 py-10 last:border-r-0 sm:[&:nth-child(2n)]:border-r-0 lg:[&:nth-child(2n)]:border-r lg:[&:nth-child(4n)]:border-r-0"
-            >
-              <span className="text-xs text-muted">{String(index + 1).padStart(2, "0")}</span>
-              <p className="font-display mt-4 text-lg text-paper">{item}</p>
-            </motion.div>
-          ))}
+          <ul className="flex list-none flex-col border-t border-line">
+            {items.map((item, index) => (
+              <Reveal key={item} as="li" delay={Math.min(index * 0.06, 0.3)}>
+                <div className="group flex items-baseline justify-between gap-6 border-b border-line py-6 transition-colors hover:border-accent/40 md:py-7">
+                  <span className="font-display text-2xl text-paper transition duration-300 group-hover:translate-x-2 group-hover:text-accent md:text-3xl">
+                    {item}
+                  </span>
+                  <span className="font-display text-sm text-muted">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+              </Reveal>
+            ))}
+          </ul>
         </div>
       </Container>
     </section>

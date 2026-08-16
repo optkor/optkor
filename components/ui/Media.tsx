@@ -6,10 +6,30 @@ import { cn } from "@/lib/utils/cn"
 
 type SafeImageProps = Omit<ImageProps, "onError" | "alt"> & { alt: string }
 
-export function SafeImage({ className, alt, ...props }: SafeImageProps) {
+/**
+ * next/image throws synchronously (a page-crashing render error, not a
+ * catchable `onError`) for any src whose host isn't in next.config.ts's
+ * `images.remotePatterns` — e.g. a project cover image pasted from a
+ * non-Supabase URL via the admin. Pre-validate here so that case degrades
+ * to the same "Image unavailable" fallback as a normal load failure,
+ * instead of taking down the whole page.
+ */
+function isAllowedImageSrc(src: ImageProps["src"]): boolean {
+  if (typeof src !== "string") return true // StaticImageData import — always safe
+  if (src.startsWith("/")) return true // local /public asset
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!supabaseUrl) return false
+  try {
+    return new URL(src).hostname === new URL(supabaseUrl).hostname
+  } catch {
+    return false
+  }
+}
+
+export function SafeImage({ className, alt, src, ...props }: SafeImageProps) {
   const [failed, setFailed] = useState(false)
 
-  if (failed) {
+  if (failed || !isAllowedImageSrc(src)) {
     return (
       <div
         role="img"
@@ -21,7 +41,7 @@ export function SafeImage({ className, alt, ...props }: SafeImageProps) {
     )
   }
 
-  return <Image alt={alt} className={className} onError={() => setFailed(true)} {...props} />
+  return <Image alt={alt} src={src} className={className} onError={() => setFailed(true)} {...props} />
 }
 
 export function VideoPlayer({

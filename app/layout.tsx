@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, Cairo } from "next/font/google";
+import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -66,7 +67,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${fraunces.variable} ${inter.variable} ${cairo.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-ink text-paper">
-        <ToastProvider>{children}</ToastProvider>
+        <MotionConfig reducedMotion="user">
+          <ToastProvider>{children}</ToastProvider>
+        </MotionConfig>
       </body>
     </html>
   );

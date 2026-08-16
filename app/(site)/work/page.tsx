@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
-import { Suspense } from "react"
+import { Suspense, ViewTransition } from "react"
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { ProjectGrid } from "@/components/work/ProjectGrid"
 import { WorkFilter } from "@/components/work/WorkFilter"
 import { ErrorState } from "@/components/ui/States"
+import { EmptyStateHero } from "@/components/ui/EmptyStateHero"
 import { getPublishedProjects, getProjectCategories } from "@/lib/queries/projects"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
@@ -26,29 +27,41 @@ export default async function WorkPage({
     getProjectCategories(),
   ])
 
+  const projects = projectsRes.data ?? []
+
   return (
-    <Container className="py-24 md:py-32">
-      <Eyebrow>{dict.work.eyebrow}</Eyebrow>
-      <Heading as="h1" size="xl" className="mt-6 max-w-2xl">
-        {dict.work.title}
-      </Heading>
-      <p className="mt-4 max-w-xl text-base text-paper-dim">{dict.work.subtitle}</p>
+    <ViewTransition
+      enter={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" }}
+      exit={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" }}
+      default="none"
+    >
+      <Container className="pt-24 pb-16 md:pt-32 md:pb-20">
+        <Eyebrow>{dict.work.eyebrow}</Eyebrow>
+        <Heading as="h1" size="xl" className="mt-6 max-w-2xl">
+          {dict.work.title}
+        </Heading>
+        <p className="mt-4 max-w-xl text-base text-paper-dim">{dict.work.subtitle}</p>
 
-      {categoriesRes.data && categoriesRes.data.length > 0 && (
-        <div className="mt-12">
-          <Suspense fallback={null}>
-            <WorkFilter categories={categoriesRes.data} allLabel={dict.work.filterAll} />
-          </Suspense>
-        </div>
-      )}
-
-      <div className="mt-16">
-        {projectsRes.error ? (
-          <ErrorState body={dict.common.somethingWrong} />
-        ) : (
-          <ProjectGrid projects={projectsRes.data ?? []} emptyTitle={dict.work.empty} />
+        {categoriesRes.data && categoriesRes.data.length > 0 && (
+          <div className="mt-12">
+            <Suspense fallback={null}>
+              <WorkFilter categories={categoriesRes.data} allLabel={dict.work.filterAll} />
+            </Suspense>
+          </div>
         )}
-      </div>
-    </Container>
+      </Container>
+
+      {projectsRes.error ? (
+        <Container className="pb-24 md:pb-32">
+          <ErrorState body={dict.common.somethingWrong} />
+        </Container>
+      ) : projects.length > 0 ? (
+        <Container className="pb-24 md:pb-32">
+          <ProjectGrid projects={projects} />
+        </Container>
+      ) : (
+        <EmptyStateHero className="border-t border-line" eyebrow={dict.work.eyebrow} title={dict.work.empty} />
+      )}
+    </ViewTransition>
   )
 }

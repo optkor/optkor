@@ -4,6 +4,8 @@ import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 import { submitContactMessage, type ContactState } from "@/lib/mutations/contact"
 import { FormField, Input, Textarea, Select } from "@/components/ui/FormField"
+import { Button } from "@/components/ui/Button"
+import { Reveal } from "@/components/motion/Reveal"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 
 const initialState: ContactState = { status: "idle", message: "" }
@@ -11,13 +13,9 @@ const initialState: ContactState = { status: "idle", message: "" }
 function SubmitButton({ dict }: { dict: Dictionary }) {
   const { pending } = useFormStatus()
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="inline-flex items-center justify-center bg-accent px-8 py-4 text-sm font-medium uppercase tracking-wide text-ink transition-colors hover:bg-accent-soft disabled:opacity-50"
-    >
+    <Button type="submit" size="lg" disabled={pending}>
       {pending ? dict.contact.submitting : dict.contact.submit}
-    </button>
+    </Button>
   )
 }
 
@@ -26,10 +24,10 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
 
   if (state.status === "success") {
     return (
-      <div role="status" className="border border-accent/30 bg-ink-2 p-8">
+      <Reveal as="div" role="status" className="border border-accent/30 bg-ink-2 p-8">
         <p className="font-display text-2xl text-paper">{dict.contact.successTitle}</p>
         <p className="mt-2 text-sm text-muted">{state.message}</p>
-      </div>
+      </Reveal>
     )
   }
 
