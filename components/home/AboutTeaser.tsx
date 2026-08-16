@@ -1,7 +1,7 @@
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Button } from "@/components/ui/Button"
-import { Reveal } from "@/components/motion/Reveal"
+import { Reveal, RevealWords } from "@/components/motion/Reveal"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 
 export function AboutTeaser({ dict }: { dict: Dictionary }) {
@@ -12,11 +12,9 @@ export function AboutTeaser({ dict }: { dict: Dictionary }) {
           <Reveal>
             <Eyebrow>{dict.home.aboutEyebrow}</Eyebrow>
           </Reveal>
-          <Reveal delay={0.1}>
-            <Heading as="h2" size="xl" className="mt-6 max-w-xl">
-              {dict.home.aboutTitle}
-            </Heading>
-          </Reveal>
+          <Heading as="h2" size="xl" className="mt-6 max-w-xl">
+            <RevealWords text={dict.home.aboutTitle} delay={0.1} />
+          </Heading>
         </div>
         <Reveal delay={0.2} className="flex flex-col items-start gap-8">
           <p className="max-w-lg text-base leading-relaxed text-paper-dim">{dict.home.aboutBody}</p>
