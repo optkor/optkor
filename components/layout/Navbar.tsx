@@ -21,8 +21,9 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const pathname = usePathname()
-  const { scrollY } = useScroll()
+  const { scrollY, scrollYProgress } = useScroll()
   const cursor = useCursor()
+  const isRtl = locale === "ar"
   const magneticRef = useRef<HTMLDivElement>(null)
   const magnetic = useMagnetic(magneticRef, 0.4)
 
@@ -141,37 +142,44 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
             </button>
           </div>
         </Container>
+        <motion.span
+          aria-hidden
+          style={{ scaleX: scrollYProgress }}
+          className="absolute inset-x-0 bottom-0 h-px origin-left bg-accent rtl:origin-right"
+        />
       </motion.header>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            initial={{ clipPath: isRtl ? "circle(0% at 10% 5%)" : "circle(0% at 90% 5%)" }}
+            animate={{ clipPath: isRtl ? "circle(150% at 10% 5%)" : "circle(150% at 90% 5%)" }}
+            exit={{ clipPath: isRtl ? "circle(0% at 10% 5%)" : "circle(0% at 90% 5%)" }}
+            transition={{ duration: 0.6, ease: EASE }}
             className="fixed inset-0 top-20 z-40 bg-ink md:hidden"
           >
             <Container className="flex h-full flex-col justify-between py-10">
               <nav className="flex flex-col gap-2">
                 {links.map((link, index) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.08 + index * 0.06, ease: EASE }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className={cn(
-                        "font-display block py-3 text-4xl transition-colors",
-                        pathname === link.href ? "text-accent" : "text-paper"
-                      )}
+                  <div key={link.href} className="overflow-hidden py-1">
+                    <motion.div
+                      initial={{ y: "115%" }}
+                      animate={{ y: "0%" }}
+                      exit={{ y: "115%" }}
+                      transition={{ duration: 0.6, delay: 0.1 + index * 0.06, ease: EASE }}
                     >
-                      {link.label}
-                    </Link>
-                  </motion.div>
+                      <Link
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className={cn(
+                          "font-display block py-2 text-4xl transition-colors",
+                          pathname === link.href ? "text-accent" : "text-paper"
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.div>
+                  </div>
                 ))}
               </nav>
 
