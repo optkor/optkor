@@ -17,19 +17,9 @@ const CORNERS = [
  * viewfinder registering a shot. Used in place of borders/rounded corners on
  * every major image/media/interactive surface (hero, project frames, team
  * photos, quote blocks) — a literal expression of "these people frame and
- * produce visuals" rather than a decorative flourish. Pass `active` to drive
- * the tightened/expanded hover state from a parent's own state instead of
- * relying on :hover (needed for keyboard focus and touch parity).
+ * produce visuals" rather than a decorative flourish.
  */
-export function FrameMark({
-  className,
-  delay = 0,
-  active,
-}: {
-  className?: string
-  delay?: number
-  active?: boolean
-}) {
+export function FrameMark({ className, delay = 0 }: { className?: string; delay?: number }) {
   const shouldReduceMotion = useReducedMotion()
 
   return (
@@ -45,8 +35,7 @@ export function FrameMark({
           initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.5 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-40px" }}
-          animate={active === undefined ? undefined : { scale: active ? 1.35 : 1, opacity: active ? 1 : 0.6 }}
-          transition={{ duration: active === undefined ? 0.5 : 0.35, delay: active === undefined ? delay + i * 0.04 : 0, ease: EASE }}
+          transition={{ duration: 0.5, delay: delay + i * 0.04, ease: EASE }}
         >
           <path d={corner.d} fill="none" stroke="currentColor" strokeWidth="1.5" />
         </motion.svg>
