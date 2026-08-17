@@ -23,7 +23,7 @@ export function CtaSection({ dict }: { dict: Dictionary }) {
           <p>{dict.home.ctaBody}</p>
         </Reveal>
         <Reveal delay={0.3}>
-          <MagneticCta className="w-fit" cursorLabel={dict.home.ctaButton}>
+          <MagneticCta className="w-fit">
             <Button href="/contact" variant="primary" size="lg">
               {dict.home.ctaButton}
             </Button>

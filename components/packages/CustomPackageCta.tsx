@@ -4,7 +4,6 @@ import Link from "next/link"
 import { useRef } from "react"
 import { motion } from "framer-motion"
 import { Reveal } from "@/components/motion/Reveal"
-import { useCursor } from "@/components/cursor/CursorContext"
 import { useMagnetic } from "@/hooks/useMagnetic"
 
 /**
@@ -21,7 +20,6 @@ export function CustomPackageCta({
   body: string
   cta: string
 }) {
-  const cursor = useCursor()
   const ref = useRef<HTMLDivElement>(null)
   const magnetic = useMagnetic(ref, 0.3)
 
@@ -36,11 +34,7 @@ export function CustomPackageCta({
           ref={ref}
           style={magnetic.style}
           onMouseMove={magnetic.onMouseMove}
-          onMouseEnter={() => cursor.setCursor("start", cta)}
-          onMouseLeave={() => {
-            magnetic.onMouseLeave?.()
-            cursor.resetCursor()
-          }}
+          onMouseLeave={magnetic.onMouseLeave}
           className="shrink-0"
         >
           <Link

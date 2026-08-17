@@ -9,7 +9,6 @@ import { Container } from "@/components/ui/Container"
 import { LanguageSwitcher } from "./LanguageSwitcher"
 import { Logo } from "./Logo"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
-import { useCursor } from "@/components/cursor/CursorContext"
 import { useMagnetic } from "@/hooks/useMagnetic"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 import type { Locale } from "@/lib/i18n/config"
@@ -22,7 +21,6 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const [hidden, setHidden] = useState(false)
   const pathname = usePathname()
   const { scrollY, scrollYProgress } = useScroll()
-  const cursor = useCursor()
   const isRtl = locale === "ar"
   const magneticRef = useRef<HTMLDivElement>(null)
   const magnetic = useMagnetic(magneticRef, 0.4)
@@ -77,8 +75,6 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
               <Link
                 key={link.href}
                 href={link.href}
-                onMouseEnter={() => cursor.setCursor("link")}
-                onMouseLeave={() => cursor.resetCursor()}
                 className={cn(
                   "group relative text-xs font-medium uppercase tracking-[0.2em] transition-colors hover:text-accent",
                   pathname === link.href ? "text-accent" : "text-paper"
@@ -107,11 +103,7 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
               ref={magneticRef}
               style={magnetic.style}
               onMouseMove={magnetic.onMouseMove}
-              onMouseEnter={() => cursor.setCursor("start", dict.common.start)}
-              onMouseLeave={() => {
-                magnetic.onMouseLeave?.()
-                cursor.resetCursor()
-              }}
+              onMouseLeave={magnetic.onMouseLeave}
             >
               <Link
                 href="/contact"

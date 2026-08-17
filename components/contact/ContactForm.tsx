@@ -26,7 +26,7 @@ const fieldRow = {
 function SubmitButton({ dict }: { dict: Dictionary }) {
   const { pending } = useFormStatus()
   return (
-    <MagneticCta className="w-fit" cursorLabel={dict.contact.submit}>
+    <MagneticCta className="w-fit">
       <Button type="submit" size="lg" disabled={pending}>
         {pending ? dict.contact.submitting : dict.contact.submit}
       </Button>

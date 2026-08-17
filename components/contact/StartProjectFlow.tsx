@@ -6,7 +6,6 @@ import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Reveal } from "@/components/motion/Reveal"
 import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { ContactForm } from "@/components/contact/ContactForm"
-import { useCursor } from "@/components/cursor/CursorContext"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 import type { PackageTier } from "@/lib/data/packages"
 
@@ -53,7 +52,6 @@ export function StartProjectFlow({
   const [stage, setStage] = useState<Stage>(initialMode ? "form" : "choose")
   const [mode, setMode] = useState<Mode>(initialMode ?? "general")
   const [packageSlug, setPackageSlug] = useState<string | null>(initialPackageSlug)
-  const cursor = useCursor()
 
   const packageIndex = packageSlug ? packages.findIndex((tier) => tier.slug === packageSlug) : -1
   const packageName = packageIndex >= 0 ? tierNames[packageIndex] : null
@@ -96,12 +94,9 @@ export function StartProjectFlow({
             <button
               type="button"
               onClick={() => {
-                cursor.resetCursor()
                 if (stage === "form" && mode === "package") setStage("pick-package")
                 else setStage("choose")
               }}
-              onMouseEnter={() => cursor.setCursor("link")}
-              onMouseLeave={() => cursor.resetCursor()}
               className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-muted transition-colors hover:text-accent"
             >
               ← {dict.common.back}
@@ -158,8 +153,6 @@ export function StartProjectFlow({
                     setMode("package")
                     setStage("form")
                   }}
-                  onMouseEnter={() => cursor.setCursor("explore", dict.packages.exploreCta)}
-                  onMouseLeave={() => cursor.resetCursor()}
                   className="group flex items-center justify-between gap-6 border border-line px-6 py-6 text-start transition-colors hover:border-accent md:px-8"
                 >
                   <span className="flex items-baseline gap-5">
@@ -238,13 +231,10 @@ function ChoiceCard({
   body: string
   onSelect: () => void
 }) {
-  const cursor = useCursor()
   return (
     <button
       type="button"
       onClick={onSelect}
-      onMouseEnter={() => cursor.setCursor("start", title)}
-      onMouseLeave={() => cursor.resetCursor()}
       className="group flex flex-col items-start gap-4 border border-line p-8 text-start transition-colors hover:border-accent md:p-10"
     >
       <span className="font-display text-sm text-muted">{index}</span>

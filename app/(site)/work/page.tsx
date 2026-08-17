@@ -59,7 +59,7 @@ export default async function WorkPage({
       ) : projects.length > 0 ? (
         <SectionCurtain>
           <Container className="pb-24 md:pb-32">
-            <ProjectGrid projects={projects} feature viewLabel={dict.common.view} />
+            <ProjectGrid projects={projects} feature />
           </Container>
         </SectionCurtain>
       ) : (

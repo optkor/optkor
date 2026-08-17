@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/Button"
 import { Eyebrow } from "@/components/ui/Heading"
 import { Marquee } from "@/components/ui/Marquee"
 import { RevealWords, Reveal } from "@/components/motion/Reveal"
-import { useCursor } from "@/components/cursor/CursorContext"
 import { useMagnetic } from "@/hooks/useMagnetic"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useThemeColors } from "@/hooks/useThemeColors"
@@ -32,7 +31,6 @@ export function Hero({ dict }: { dict: Dictionary }) {
   const shouldReduceMotion = useReducedMotion()
   const hasFinePointer = useMediaQuery("(pointer: fine)")
   const colors = useThemeColors()
-  const cursor = useCursor()
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -133,11 +131,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
               ref={primaryRef}
               style={primaryMagnetic.style}
               onMouseMove={primaryMagnetic.onMouseMove}
-              onMouseEnter={() => cursor.setCursor("view", dict.common.view)}
-              onMouseLeave={() => {
-                primaryMagnetic.onMouseLeave?.()
-                cursor.resetCursor()
-              }}
+              onMouseLeave={primaryMagnetic.onMouseLeave}
             >
               <Button href="/work" variant="primary">
                 {dict.home.heroCtaPrimary}
@@ -147,11 +141,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
               ref={secondaryRef}
               style={secondaryMagnetic.style}
               onMouseMove={secondaryMagnetic.onMouseMove}
-              onMouseEnter={() => cursor.setCursor("start", dict.common.start)}
-              onMouseLeave={() => {
-                secondaryMagnetic.onMouseLeave?.()
-                cursor.resetCursor()
-              }}
+              onMouseLeave={secondaryMagnetic.onMouseLeave}
             >
               <Button href="/contact" variant="secondary">
                 {dict.home.heroCtaSecondary}

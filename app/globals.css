@@ -163,19 +163,6 @@ body {
   filter: invert(1);
 }
 
-/* Custom cursor — only applied on fine-pointer/hover-capable devices with
-   no reduced-motion preference (see CursorProvider). Text fields keep the
-   native I-beam since that's a meaningful affordance, not decoration. */
-.custom-cursor-active,
-.custom-cursor-active * {
-  cursor: none !important;
-}
-.custom-cursor-active input,
-.custom-cursor-active textarea,
-.custom-cursor-active select {
-  cursor: auto !important;
-}
-
 /* Lenis smooth scroll (JS-driven; disabled on touch/reduced-motion, see
    components/providers/SmoothScrollProvider.tsx). Native scroll otherwise. */
 html.lenis {

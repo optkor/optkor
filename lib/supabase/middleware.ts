@@ -10,6 +10,15 @@ const PUBLIC_ADMIN_PATHS = new Set([LOGIN_PATH, "/admin/forgot-password"])
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
+  // Auth only matters under /admin (login/session-refresh/role gating).
+  // Every other route on the site is public, so skip the Supabase round
+  // trip entirely there instead of paying an auth network call on every
+  // page view — the protected layout re-verifies auth server-side anyway
+  // (defense in depth), so this is the only place that needed it.
+  if (!request.nextUrl.pathname.startsWith(PROTECTED_PREFIX)) {
+    return supabaseResponse
+  }
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 

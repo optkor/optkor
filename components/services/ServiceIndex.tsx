@@ -5,18 +5,16 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { useGSAP } from "@gsap/react"
 import { cn } from "@/lib/utils/cn"
 import { Reveal } from "@/components/motion/Reveal"
-import { useCursor } from "@/components/cursor/CursorContext"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { gsap } from "@/lib/motion/gsap"
 import type { Service } from "@/lib/supabase/types"
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
-export function ServiceIndex({ services, exploreLabel = "Explore" }: { services: Service[]; exploreLabel?: string }) {
+export function ServiceIndex({ services }: { services: Service[] }) {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [focusIndex, setFocusIndex] = useState(0)
   const focused = services[focusIndex]
-  const cursor = useCursor()
 
   const shouldReduceMotion = useReducedMotion()
   const isDesktop = useMediaQuery("(min-width: 1024px)")
@@ -62,11 +60,9 @@ export function ServiceIndex({ services, exploreLabel = "Explore" }: { services:
   function handleRowHover(index: number) {
     scrollLocked.current = true
     setFocusIndex(index)
-    cursor.setCursor("explore", exploreLabel)
   }
   function handleRowLeave() {
     scrollLocked.current = false
-    cursor.resetCursor()
   }
 
   return (

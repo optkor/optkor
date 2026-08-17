@@ -6,7 +6,6 @@ import { useReducedMotion } from "framer-motion"
 import { useGSAP } from "@gsap/react"
 import { Container } from "@/components/ui/Container"
 import { Logo } from "./Logo"
-import { useCursor } from "@/components/cursor/CursorContext"
 import { gsap } from "@/lib/motion/gsap"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 import type { SiteSettings } from "@/lib/supabase/types"
@@ -19,15 +18,6 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
   const year = new Date().getFullYear()
   const social = isSocialLinks(settings.social_links) ? settings.social_links : {}
   const socialEntries = Object.entries(social).filter(([, url]) => Boolean(url)) as [string, string][]
-  const cursor = useCursor()
-  const linkHover = {
-    onMouseEnter: () => cursor.setCursor("link"),
-    onMouseLeave: () => cursor.resetCursor(),
-  }
-  const openHover = {
-    onMouseEnter: () => cursor.setCursor("open", dict.common.open),
-    onMouseLeave: () => cursor.resetCursor(),
-  }
 
   const shouldReduceMotion = useReducedMotion()
   const footerRef = useRef<HTMLElement>(null)
@@ -80,19 +70,19 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
             {dict.footer.navigation}
           </p>
           <nav className="mt-5 flex flex-col gap-3">
-            <Link href="/work" {...linkHover} className="w-fit text-sm text-paper transition-colors hover:text-accent">
+            <Link href="/work" className="w-fit text-sm text-paper transition-colors hover:text-accent">
               {dict.nav.work}
             </Link>
-            <Link href="/services" {...linkHover} className="w-fit text-sm text-paper transition-colors hover:text-accent">
+            <Link href="/services" className="w-fit text-sm text-paper transition-colors hover:text-accent">
               {dict.nav.services}
             </Link>
-            <Link href="/packages" {...linkHover} className="w-fit text-sm text-paper transition-colors hover:text-accent">
+            <Link href="/packages" className="w-fit text-sm text-paper transition-colors hover:text-accent">
               {dict.nav.packages}
             </Link>
-            <Link href="/about" {...linkHover} className="w-fit text-sm text-paper transition-colors hover:text-accent">
+            <Link href="/about" className="w-fit text-sm text-paper transition-colors hover:text-accent">
               {dict.nav.about}
             </Link>
-            <Link href="/contact" {...linkHover} className="w-fit text-sm text-paper transition-colors hover:text-accent">
+            <Link href="/contact" className="w-fit text-sm text-paper transition-colors hover:text-accent">
               {dict.nav.contact}
             </Link>
           </nav>
@@ -106,7 +96,6 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
             {settings.contact_email && (
               <a
                 href={`mailto:${settings.contact_email}`}
-                {...openHover}
                 className="w-fit text-sm text-paper transition-colors hover:text-accent"
               >
                 {settings.contact_email}
@@ -115,7 +104,6 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
             {settings.contact_phone && (
               <a
                 href={`tel:${settings.contact_phone}`}
-                {...openHover}
                 className="w-fit text-sm text-paper transition-colors hover:text-accent"
               >
                 {settings.contact_phone}
@@ -127,7 +115,6 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                {...openHover}
                 className="w-fit text-sm capitalize text-paper transition-colors hover:text-accent"
               >
                 {platform}

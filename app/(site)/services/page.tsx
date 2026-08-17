@@ -49,7 +49,7 @@ export default async function ServicesPage() {
       ) : (
         <SectionCurtain>
           <Container className="pb-24 md:pb-32">
-            <ServiceIndex services={services} exploreLabel={dict.common.explore} />
+            <ServiceIndex services={services} />
           </Container>
         </SectionCurtain>
       )}

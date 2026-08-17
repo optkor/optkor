@@ -5,7 +5,6 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils/cn"
 import { Reveal } from "@/components/motion/Reveal"
-import { useCursor } from "@/components/cursor/CursorContext"
 import { useMagnetic } from "@/hooks/useMagnetic"
 import type { PackageTier } from "@/lib/data/packages"
 
@@ -34,7 +33,6 @@ export function PackageCard({
 }) {
   const isPremium = tier.badge === "premium"
   const isCore = tier.badge === "core"
-  const cursor = useCursor()
   const ctaRef = useRef<HTMLDivElement>(null)
   const magnetic = useMagnetic(ctaRef, 0.3)
 
@@ -92,11 +90,7 @@ export function PackageCard({
             ref={ctaRef}
             style={magnetic.style}
             onMouseMove={magnetic.onMouseMove}
-            onMouseEnter={() => cursor.setCursor("explore", exploreLabel)}
-            onMouseLeave={() => {
-              magnetic.onMouseLeave?.()
-              cursor.resetCursor()
-            }}
+            onMouseLeave={magnetic.onMouseLeave}
             className="mt-6"
           >
             <Link

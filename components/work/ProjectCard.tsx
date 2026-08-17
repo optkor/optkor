@@ -7,7 +7,6 @@ import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-moti
 import { useGSAP } from "@gsap/react"
 import { SafeImage } from "@/components/ui/Media"
 import { Reveal } from "@/components/motion/Reveal"
-import { useCursor } from "@/components/cursor/CursorContext"
 import { gsap } from "@/lib/motion/gsap"
 import type { Project } from "@/lib/supabase/types"
 
@@ -15,14 +14,11 @@ export function ProjectCard({
   project,
   index = 0,
   aspect = "aspect-[4/3]",
-  viewLabel,
 }: {
   project: Project
   index?: number
   aspect?: string
-  viewLabel: string
 }) {
-  const cursor = useCursor()
   const shouldReduceMotion = useReducedMotion()
   const frameRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
@@ -74,8 +70,6 @@ export function ProjectCard({
       <Link
         href={`/work/${project.slug}`}
         transitionTypes={["nav-forward"]}
-        onMouseEnter={() => cursor.setCursor("view", viewLabel)}
-        onMouseLeave={() => cursor.resetCursor()}
         className="group block"
         style={{ perspective: 1200 }}
       >

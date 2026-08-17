@@ -179,12 +179,12 @@ export default async function PackageDetailPage({ params }: Props) {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  <MagneticCta cursorLabel={dict.packages.requestCta}>
+                  <MagneticCta>
                     <Button href={`/contact?package=${tier.slug}`} variant={isPremium ? "secondary" : "primary"} className="w-full">
                       {dict.packages.requestCta}
                     </Button>
                   </MagneticCta>
-                  <MagneticCta cursorVariant="explore" cursorLabel={dict.packages.askCta}>
+                  <MagneticCta>
                     <a
                       href={askHref}
                       className={`inline-flex w-full items-center justify-center px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] transition-colors ${
