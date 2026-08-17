@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Reveal } from "@/components/motion/Reveal"
+import { FrameMark } from "@/components/motion/FrameMark"
 import { SafeImage } from "@/components/ui/Media"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 import type { TeamMember } from "@/lib/supabase/types"
@@ -31,7 +32,8 @@ export function TeamSection({ dict, members }: { dict: Dictionary; members: Team
 
             return (
               <Reveal key={member.id} delay={Math.min(index * 0.06, 0.3)} className="flex flex-col gap-4">
-                <div className="aspect-[4/5] w-full overflow-hidden bg-ink-3">
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink-3">
+                  <FrameMark />
                   {member.photo_url ? (
                     <SafeImage
                       src={member.photo_url}

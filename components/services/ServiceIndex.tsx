@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { useGSAP } from "@gsap/react"
 import { cn } from "@/lib/utils/cn"
 import { Reveal } from "@/components/motion/Reveal"
+import { FrameMark } from "@/components/motion/FrameMark"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { gsap } from "@/lib/motion/gsap"
 import type { Service } from "@/lib/supabase/types"
@@ -153,7 +154,8 @@ export function ServiceIndex({ services }: { services: Service[] }) {
           treatment instead of a stock photo. Scroll-pinned on desktop so it
           reads as the stage the list performs against, not a sidebar. */}
       <div className="relative hidden lg:block">
-        <div className="sticky top-32 h-[420px] overflow-hidden border border-line">
+        <div className="sticky top-32 h-[420px] overflow-hidden">
+          <FrameMark />
           {/* No `mode="wait"` — a stalled exit (e.g. a slow/backgrounded
               tab) would otherwise block the next panel from ever mounting.
               Concurrent enter/exit crossfades fine for a simple opacity swap. */}
