@@ -133,7 +133,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
               ref={primaryRef}
               style={primaryMagnetic.style}
               onMouseMove={primaryMagnetic.onMouseMove}
-              onMouseEnter={() => cursor.setCursor("cta")}
+              onMouseEnter={() => cursor.setCursor("view", dict.common.view)}
               onMouseLeave={() => {
                 primaryMagnetic.onMouseLeave?.()
                 cursor.resetCursor()
@@ -147,7 +147,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
               ref={secondaryRef}
               style={secondaryMagnetic.style}
               onMouseMove={secondaryMagnetic.onMouseMove}
-              onMouseEnter={() => cursor.setCursor("cta")}
+              onMouseEnter={() => cursor.setCursor("start", dict.common.start)}
               onMouseLeave={() => {
                 secondaryMagnetic.onMouseLeave?.()
                 cursor.resetCursor()

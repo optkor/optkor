@@ -62,7 +62,7 @@ export function ServiceIndex({ services, exploreLabel = "Explore" }: { services:
   function handleRowHover(index: number) {
     scrollLocked.current = true
     setFocusIndex(index)
-    cursor.setCursor("link", exploreLabel)
+    cursor.setCursor("explore", exploreLabel)
   }
   function handleRowLeave() {
     scrollLocked.current = false

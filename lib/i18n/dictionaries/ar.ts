@@ -31,6 +31,8 @@ const ar = {
     viewProject: "عرض المشروع",
     explore: "استكشف",
     scroll: "مرر للأسفل",
+    view: "عرض",
+    start: "ابدأ",
   },
   home: {
     heroEyebrow: "إنتاج بصري لشركات B2B",

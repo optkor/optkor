@@ -103,7 +103,7 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
               ref={magneticRef}
               style={magnetic.style}
               onMouseMove={magnetic.onMouseMove}
-              onMouseEnter={() => cursor.setCursor("cta")}
+              onMouseEnter={() => cursor.setCursor("start", dict.common.start)}
               onMouseLeave={() => {
                 magnetic.onMouseLeave?.()
                 cursor.resetCursor()

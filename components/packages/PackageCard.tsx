@@ -92,7 +92,7 @@ export function PackageCard({
             ref={ctaRef}
             style={magnetic.style}
             onMouseMove={magnetic.onMouseMove}
-            onMouseEnter={() => cursor.setCursor("cta")}
+            onMouseEnter={() => cursor.setCursor("start")}
             onMouseLeave={() => {
               magnetic.onMouseLeave?.()
               cursor.resetCursor()

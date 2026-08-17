@@ -29,6 +29,8 @@ const en = {
     viewProject: "View Project",
     explore: "Explore",
     scroll: "Scroll",
+    view: "View",
+    start: "Start",
   },
   home: {
     heroEyebrow: "B2B Visual Production",

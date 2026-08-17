@@ -74,7 +74,7 @@ export function ProjectCard({
       <Link
         href={`/work/${project.slug}`}
         transitionTypes={["nav-forward"]}
-        onMouseEnter={() => cursor.setCursor("project", viewLabel)}
+        onMouseEnter={() => cursor.setCursor("view", viewLabel)}
         onMouseLeave={() => cursor.resetCursor()}
         className="group block"
         style={{ perspective: 1200 }}

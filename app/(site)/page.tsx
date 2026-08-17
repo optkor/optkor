@@ -49,7 +49,7 @@ export default async function HomePage() {
               </div>
 
               <div className="mt-16">
-                <ProjectGrid projects={projects} feature viewLabel={dict.common.viewProject} />
+                <ProjectGrid projects={projects} feature viewLabel={dict.common.view} />
               </div>
             </Container>
           </SectionCurtain>

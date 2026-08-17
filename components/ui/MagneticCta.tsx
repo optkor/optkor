@@ -8,7 +8,7 @@ import { useCursor, type CursorVariant } from "@/components/cursor/CursorContext
 export function MagneticCta({
   children,
   strength = 0.3,
-  cursorVariant = "cta",
+  cursorVariant = "start",
   cursorLabel,
   className,
 }: {

@@ -59,7 +59,7 @@ export function ProjectFeature({ project, viewLabel }: { project: Project; viewL
       <Link
         href={`/work/${project.slug}`}
         transitionTypes={["nav-forward"]}
-        onMouseEnter={() => cursor.setCursor("project", viewLabel)}
+        onMouseEnter={() => cursor.setCursor("view", viewLabel)}
         onMouseLeave={() => cursor.resetCursor()}
         className="group block"
       >
