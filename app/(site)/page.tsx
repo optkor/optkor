@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { ViewTransition } from "react"
 import { Hero } from "@/components/home/Hero"
 import { Capabilities } from "@/components/home/Capabilities"
@@ -15,6 +16,18 @@ import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getPublishedProjects } from "@/lib/queries/projects"
 import { getPublishedTestimonials } from "@/lib/queries/testimonials"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
+import { getSiteSettings } from "@/lib/queries/settings"
+import { resolvePageMetadata } from "@/lib/seo/resolve-page-metadata"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { data: settings } = await getSiteSettings()
+  return resolvePageMetadata("/", {
+    title: settings.seo_title ?? "OPTKOR — Visual Production Company",
+    description:
+      settings.seo_description ??
+      "OPTKOR is a B2B visual production partner for marketing agencies and brands.",
+  })
+}
 
 export default async function HomePage() {
   const [{ dict }, { data: projects, error }, { data: testimonials }] = await Promise.all([

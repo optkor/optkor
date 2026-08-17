@@ -10,10 +10,11 @@ import { PACKAGES } from "@/lib/data/packages"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getSiteSettings } from "@/lib/queries/settings"
 import { getWhatsAppHref } from "@/lib/utils/whatsapp"
+import { resolvePageMetadata } from "@/lib/seo/resolve-page-metadata"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dict } = await getDictionary()
-  return { title: dict.packages.title, description: dict.packages.subtitle }
+  return resolvePageMetadata("/packages", { title: dict.packages.title, description: dict.packages.subtitle })
 }
 
 export default async function PackagesPage() {

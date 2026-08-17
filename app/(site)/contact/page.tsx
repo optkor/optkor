@@ -8,10 +8,11 @@ import { getSiteSettings } from "@/lib/queries/settings"
 import { getPublishedFaqs } from "@/lib/queries/faqs"
 import { getWhatsAppHref } from "@/lib/utils/whatsapp"
 import { PACKAGES } from "@/lib/data/packages"
+import { resolvePageMetadata } from "@/lib/seo/resolve-page-metadata"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dict } = await getDictionary()
-  return { title: dict.contact.title, description: dict.contact.subtitle }
+  return resolvePageMetadata("/contact", { title: dict.contact.title, description: dict.contact.subtitle })
 }
 
 export default async function ContactPage({

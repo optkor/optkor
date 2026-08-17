@@ -9,10 +9,11 @@ import { Reveal } from "@/components/motion/Reveal"
 import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getPublishedServices } from "@/lib/queries/services"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
+import { resolvePageMetadata } from "@/lib/seo/resolve-page-metadata"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dict } = await getDictionary()
-  return { title: dict.services.title, description: dict.services.subtitle }
+  return resolvePageMetadata("/services", { title: dict.services.title, description: dict.services.subtitle })
 }
 
 export default async function ServicesPage() {

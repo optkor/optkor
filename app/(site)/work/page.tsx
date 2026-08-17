@@ -9,10 +9,11 @@ import { EmptyStateHero } from "@/components/ui/EmptyStateHero"
 import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getPublishedProjects, getProjectCategories } from "@/lib/queries/projects"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
+import { resolvePageMetadata } from "@/lib/seo/resolve-page-metadata"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dict } = await getDictionary()
-  return { title: dict.work.title, description: dict.work.subtitle }
+  return resolvePageMetadata("/work", { title: dict.work.title, description: dict.work.subtitle })
 }
 
 export default async function WorkPage({

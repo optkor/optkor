@@ -8,10 +8,11 @@ import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { TeamSection } from "@/components/about/TeamSection"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getPublishedTeamMembers } from "@/lib/queries/team"
+import { resolvePageMetadata } from "@/lib/seo/resolve-page-metadata"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dict } = await getDictionary()
-  return { title: dict.about.title, description: dict.home.aboutBody }
+  return resolvePageMetadata("/about", { title: dict.about.title, description: dict.home.aboutBody })
 }
 
 export default async function AboutPage() {

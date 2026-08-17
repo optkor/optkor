@@ -13,6 +13,7 @@ const links = [
   { href: "/admin/faqs", label: "FAQs" },
   { href: "/admin/team", label: "Team" },
   { href: "/admin/content", label: "Site Content" },
+  { href: "/admin/seo", label: "SEO" },
   { href: "/admin/messages", label: "Messages" },
   { href: "/admin/users", label: "Admin Users" },
   { href: "/admin/settings", label: "Settings" },
