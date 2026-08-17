@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/lib/supabase/server"
 import { siteSettingsSchema } from "@/lib/validations/settings"
+import { HOME_SECTION_DEFS, type HomeSectionKey } from "@/lib/data/home-sections"
 import type { MutationState } from "./projects"
 
 export async function updateSiteSettings(
@@ -47,4 +48,55 @@ export async function updateSiteSettings(
 
   revalidatePath("/", "layout")
   return { status: "success", message: "Settings saved." }
+}
+
+const VALID_HOME_KEYS = new Set(HOME_SECTION_DEFS.map((s) => s.key))
+
+function isHomeSectionArray(
+  value: unknown
+): value is { key: HomeSectionKey; visible: boolean }[] {
+  return (
+    Array.isArray(value) &&
+    value.length === HOME_SECTION_DEFS.length &&
+    value.every(
+      (entry) =>
+        entry &&
+        typeof entry === "object" &&
+        typeof entry.key === "string" &&
+        VALID_HOME_KEYS.has(entry.key) &&
+        typeof entry.visible === "boolean"
+    )
+  )
+}
+
+export async function updateHomeSections(
+  _prevState: MutationState,
+  formData: FormData
+): Promise<MutationState> {
+  const raw = formData.get("home_sections")
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(String(raw ?? ""))
+  } catch {
+    return { status: "error", message: "Unable to save section order." }
+  }
+
+  if (!isHomeSectionArray(parsed)) {
+    return { status: "error", message: "Unable to save section order." }
+  }
+
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from("site_settings")
+    .update({ homepage_config: { sections: parsed } })
+    .eq("id", true)
+
+  if (error) {
+    console.error("[updateHomeSections]", error.message)
+    return { status: "error", message: "Unable to save section order." }
+  }
+
+  revalidatePath("/", "layout")
+  revalidatePath("/admin/settings")
+  return { status: "success", message: "Section order saved." }
 }

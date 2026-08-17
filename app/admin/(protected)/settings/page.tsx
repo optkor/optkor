@@ -1,8 +1,10 @@
 import Link from "next/link"
 import { getSiteSettings } from "@/lib/queries/settings"
 import { SettingsForm } from "@/components/admin/SettingsForm"
+import { HomeSectionsForm } from "@/components/admin/HomeSectionsForm"
 import { ChangePasswordForm } from "@/components/admin/ChangePasswordForm"
 import { ErrorState } from "@/components/ui/States"
+import { resolveHomeSections } from "@/lib/data/home-sections"
 
 export const metadata = { title: { absolute: "Settings — OPTKOR Admin" } }
 
@@ -20,6 +22,16 @@ export default async function AdminSettingsPage() {
 
       <div className="mt-10">
         <SettingsForm settings={settings} />
+      </div>
+
+      <div className="mt-16 border-t border-line pt-10">
+        <h2 className="font-display text-xl text-paper">Homepage Layout</h2>
+        <p className="mt-2 text-sm text-muted">
+          Reorder or hide sections on the homepage. The hero always stays first.
+        </p>
+        <div className="mt-6">
+          <HomeSectionsForm initial={resolveHomeSections(settings.homepage_config)} />
+        </div>
       </div>
 
       <div className="mt-16 border-t border-line pt-10">

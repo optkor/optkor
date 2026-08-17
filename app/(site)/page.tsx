@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { ViewTransition } from "react"
+import type { ReactNode } from "react"
+import { Fragment, ViewTransition } from "react"
 import { Hero } from "@/components/home/Hero"
 import { Capabilities } from "@/components/home/Capabilities"
 import { Process } from "@/components/home/Process"
@@ -18,6 +19,7 @@ import { getPublishedTestimonials } from "@/lib/queries/testimonials"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getSiteSettings } from "@/lib/queries/settings"
 import { resolvePageMetadata } from "@/lib/seo/resolve-page-metadata"
+import { resolveHomeSections, type HomeSectionKey } from "@/lib/data/home-sections"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await getSiteSettings()
@@ -36,74 +38,88 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [{ dict }, { data: projects, error }, { data: testimonials }] = await Promise.all([
+  const [{ dict }, { data: projects, error }, { data: testimonials }, { data: settings }] = await Promise.all([
     getDictionary(),
     getPublishedProjects({ featuredOnly: true }),
     getPublishedTestimonials(),
+    getSiteSettings(),
   ])
+
+  const sectionNodes: Partial<Record<HomeSectionKey, ReactNode>> = {
+    work: error ? (
+      <section className="border-t border-line py-24 md:py-32">
+        <SectionCurtain>
+          <Container>
+            <ErrorState title={dict.common.somethingWrong} />
+          </Container>
+        </SectionCurtain>
+      </section>
+    ) : projects && projects.length > 0 ? (
+      <section className="border-t border-line py-24 md:py-32">
+        <SectionCurtain>
+          <Container>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <Eyebrow>{dict.home.workEyebrow}</Eyebrow>
+                <Heading as="h2" size="xl" className="mt-6 max-w-xl">
+                  {dict.home.workTitle}
+                </Heading>
+              </div>
+              <Button href="/work" variant="secondary">
+                {dict.common.viewAllWork}
+              </Button>
+            </div>
+
+            <div className="mt-16">
+              <ProjectGrid projects={projects} feature />
+            </div>
+          </Container>
+        </SectionCurtain>
+      </section>
+    ) : (
+      <SectionCurtain>
+        <EmptyStateHero
+          className="border-t border-line"
+          eyebrow={dict.home.workEyebrow}
+          title={dict.home.workTitle}
+          body={dict.home.workEmpty}
+        />
+      </SectionCurtain>
+    ),
+    capabilities: (
+      <SectionCurtain>
+        <Capabilities dict={dict} />
+      </SectionCurtain>
+    ),
+    process: (
+      <SectionCurtain>
+        <Process dict={dict} />
+      </SectionCurtain>
+    ),
+    about: (
+      <SectionCurtain>
+        <AboutTeaser dict={dict} />
+      </SectionCurtain>
+    ),
+    testimonials:
+      testimonials && testimonials.length > 0 ? (
+        <SectionCurtain>
+          <TestimonialsSection dict={dict} testimonials={testimonials} />
+        </SectionCurtain>
+      ) : null,
+    cta: (
+      <SectionCurtain>
+        <CtaSection dict={dict} />
+      </SectionCurtain>
+    ),
+  }
+
+  const sections = resolveHomeSections(settings.homepage_config)
 
   return (
     <ViewTransition default="page-transition">
       <Hero dict={dict} />
-
-      {error ? (
-        <section className="border-t border-line py-24 md:py-32">
-          <SectionCurtain>
-            <Container>
-              <ErrorState title={dict.common.somethingWrong} />
-            </Container>
-          </SectionCurtain>
-        </section>
-      ) : projects && projects.length > 0 ? (
-        <section className="border-t border-line py-24 md:py-32">
-          <SectionCurtain>
-            <Container>
-              <div className="flex flex-wrap items-end justify-between gap-6">
-                <div>
-                  <Eyebrow>{dict.home.workEyebrow}</Eyebrow>
-                  <Heading as="h2" size="xl" className="mt-6 max-w-xl">
-                    {dict.home.workTitle}
-                  </Heading>
-                </div>
-                <Button href="/work" variant="secondary">
-                  {dict.common.viewAllWork}
-                </Button>
-              </div>
-
-              <div className="mt-16">
-                <ProjectGrid projects={projects} feature />
-              </div>
-            </Container>
-          </SectionCurtain>
-        </section>
-      ) : (
-        <SectionCurtain>
-          <EmptyStateHero
-            className="border-t border-line"
-            eyebrow={dict.home.workEyebrow}
-            title={dict.home.workTitle}
-            body={dict.home.workEmpty}
-          />
-        </SectionCurtain>
-      )}
-
-      <SectionCurtain>
-        <Capabilities dict={dict} />
-      </SectionCurtain>
-      <SectionCurtain>
-        <Process dict={dict} />
-      </SectionCurtain>
-      <SectionCurtain>
-        <AboutTeaser dict={dict} />
-      </SectionCurtain>
-      {testimonials && testimonials.length > 0 && (
-        <SectionCurtain>
-          <TestimonialsSection dict={dict} testimonials={testimonials} />
-        </SectionCurtain>
-      )}
-      <SectionCurtain>
-        <CtaSection dict={dict} />
-      </SectionCurtain>
+      {sections.map(({ key, visible }) => (visible ? <Fragment key={key}>{sectionNodes[key]}</Fragment> : null))}
     </ViewTransition>
   )
 }
