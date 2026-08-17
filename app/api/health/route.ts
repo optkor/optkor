@@ -3,7 +3,18 @@ import { createClient } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
 
-const REQUIRED_TABLES = ["projects", "project_media", "services", "contact_messages", "site_settings"] as const
+const REQUIRED_TABLES = [
+  "projects",
+  "project_media",
+  "services",
+  "contact_messages",
+  "site_settings",
+  "testimonials",
+  "faqs",
+  "team_members",
+  "site_content",
+  "page_meta",
+] as const
 
 /**
  * Safe, secret-free health check for verifying the Supabase connection is
