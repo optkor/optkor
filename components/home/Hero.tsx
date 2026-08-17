@@ -93,7 +93,6 @@ export function Hero({ dict }: { dict: Dictionary }) {
       onMouseLeave={handlePointerLeave}
       className="relative flex min-h-screen flex-col overflow-hidden border-b border-line bg-ink"
     >
-      <FrameMark className="m-6 md:m-10 lg:m-16" delay={1.1} />
       {/* Background layer intentionally keeps default pointer-events (not
           `pointer-events-none`) — the WebGL canvas needs real pointer
           events to drive its own reactivity. This doesn't steal clicks
@@ -194,6 +193,14 @@ export function Hero({ dict }: { dict: Dictionary }) {
           <Marquee items={capabilities} />
         </div>
       </motion.div>
+
+      {/* Rendered last (purely additive, absolutely positioned) so it never
+          shifts the sibling index of the conditionally-mounted WebGL scene
+          above — inserting it earlier caused React's index-based
+          reconciliation to misattribute DOM nodes across siblings and crash
+          the Three.js canvas mid-mount (`removeChild`/`addEventListener on
+          null`), confirmed by bisecting against the previous deployment. */}
+      <FrameMark className="m-6 md:m-10 lg:m-16" delay={1.1} />
     </section>
   )
 }
