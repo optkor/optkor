@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/Button"
 import { Eyebrow } from "@/components/ui/Heading"
 import { Marquee } from "@/components/ui/Marquee"
 import { RevealWords, Reveal } from "@/components/motion/Reveal"
+import { FrameMark } from "@/components/motion/FrameMark"
 import { useMagnetic } from "@/hooks/useMagnetic"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useThemeColors } from "@/hooks/useThemeColors"
@@ -132,42 +133,44 @@ export function Hero({ dict }: { dict: Dictionary }) {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink to-transparent"
       />
 
-      <div className="relative flex flex-1 flex-col justify-center px-6 pt-28 pb-16 md:px-10 md:pt-32 lg:px-16">
-        <motion.div style={{ y: contentY, opacity: fade }} className="mx-auto w-full max-w-[1400px]">
+      <div className="relative flex flex-1 flex-col justify-end px-6 pt-28 pb-20 md:px-10 md:pt-32 lg:px-16 lg:pb-24">
+        <motion.div style={{ y: contentY, opacity: fade }} className="w-full max-w-[1400px]">
           <Reveal y={12}>
             <Eyebrow>{dict.home.heroEyebrow}</Eyebrow>
           </Reveal>
 
-          <h1 className="font-display mt-8 max-w-6xl text-[length:var(--text-hero)] leading-[0.92] tracking-tight text-paper">
+          <h1 className="font-display mt-6 max-w-6xl text-[length:var(--text-hero)] leading-[0.9] tracking-tight text-paper">
             <RevealWords text={dict.home.heroTitle} delay={0.15} />
           </h1>
 
-          <Reveal delay={0.55} className="mt-8 max-w-xl text-base leading-relaxed text-paper-dim md:text-lg">
-            <p>{dict.home.heroSubtitle}</p>
-          </Reveal>
+          <div className="mt-8 grid grid-cols-1 items-end gap-8 lg:grid-cols-[1fr_auto]">
+            <Reveal delay={0.55} className="max-w-xl text-base leading-relaxed text-paper-dim md:text-lg">
+              <p>{dict.home.heroSubtitle}</p>
+            </Reveal>
 
-          <Reveal delay={0.72} className="mt-12 flex flex-wrap gap-4">
-            <motion.div
-              ref={primaryRef}
-              style={primaryMagnetic.style}
-              onMouseMove={primaryMagnetic.onMouseMove}
-              onMouseLeave={primaryMagnetic.onMouseLeave}
-            >
-              <Button href="/work" variant="primary">
-                {dict.home.heroCtaPrimary}
-              </Button>
-            </motion.div>
-            <motion.div
-              ref={secondaryRef}
-              style={secondaryMagnetic.style}
-              onMouseMove={secondaryMagnetic.onMouseMove}
-              onMouseLeave={secondaryMagnetic.onMouseLeave}
-            >
-              <Button href="/contact" variant="secondary">
-                {dict.home.heroCtaSecondary}
-              </Button>
-            </motion.div>
-          </Reveal>
+            <Reveal delay={0.72} className="flex flex-wrap gap-4 lg:justify-end">
+              <motion.div
+                ref={primaryRef}
+                style={primaryMagnetic.style}
+                onMouseMove={primaryMagnetic.onMouseMove}
+                onMouseLeave={primaryMagnetic.onMouseLeave}
+              >
+                <Button href="/work" variant="primary">
+                  {dict.home.heroCtaPrimary}
+                </Button>
+              </motion.div>
+              <motion.div
+                ref={secondaryRef}
+                style={secondaryMagnetic.style}
+                onMouseMove={secondaryMagnetic.onMouseMove}
+                onMouseLeave={secondaryMagnetic.onMouseLeave}
+              >
+                <Button href="/contact" variant="secondary">
+                  {dict.home.heroCtaSecondary}
+                </Button>
+              </motion.div>
+            </Reveal>
+          </div>
         </motion.div>
       </div>
 
@@ -177,13 +180,27 @@ export function Hero({ dict }: { dict: Dictionary }) {
         transition={{ duration: 0.8, delay: 1.05, ease: EASE }}
         className="relative flex items-center gap-8 border-t border-line px-6 py-5 md:px-10 lg:px-16"
       >
-        <span className="hidden shrink-0 text-[length:var(--text-micro)] font-medium uppercase tracking-[0.3em] text-muted md:block">
+        <span className="hidden shrink-0 items-baseline gap-[0.35em] text-[length:var(--text-micro)] font-semibold uppercase tracking-[0.3em] text-muted md:inline-flex">
+          <span aria-hidden className="text-muted/60">
+            [
+          </span>
           {dict.home.capabilitiesEyebrow}
+          <span aria-hidden className="text-muted/60">
+            ]
+          </span>
         </span>
         <div className="min-w-0 flex-1">
           <Marquee items={capabilities} />
         </div>
       </motion.div>
+
+      {/* Rendered last (purely additive, absolutely positioned) so it never
+          shifts the sibling index of the conditionally-mounted WebGL scene
+          above — inserting it earlier caused React's index-based
+          reconciliation to misattribute DOM nodes across siblings and crash
+          the Three.js canvas mid-mount (`removeChild`/`addEventListener on
+          null`), confirmed by bisecting against the previous deployment. */}
+      <FrameMark className="m-6 md:m-10 lg:m-16" delay={1.1} />
     </section>
   )
 }
