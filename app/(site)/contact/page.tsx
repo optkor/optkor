@@ -2,8 +2,10 @@ import type { Metadata } from "next"
 import { ViewTransition } from "react"
 import { Container } from "@/components/ui/Container"
 import { StartProjectFlow } from "@/components/contact/StartProjectFlow"
+import { FaqSection } from "@/components/contact/FaqSection"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getSiteSettings } from "@/lib/queries/settings"
+import { getPublishedFaqs } from "@/lib/queries/faqs"
 import { getWhatsAppHref } from "@/lib/utils/whatsapp"
 import { PACKAGES } from "@/lib/data/packages"
 
@@ -17,11 +19,8 @@ export default async function ContactPage({
 }: {
   searchParams: Promise<{ package?: string; custom?: string }>
 }) {
-  const [{ dict, locale }, { data: settings }, { package: packageSlug, custom }] = await Promise.all([
-    getDictionary(),
-    getSiteSettings(),
-    searchParams,
-  ])
+  const [{ dict, locale }, { data: settings }, { package: packageSlug, custom }, { data: faqs }] =
+    await Promise.all([getDictionary(), getSiteSettings(), searchParams, getPublishedFaqs()])
 
   const tierNames = [dict.packages.tier1Name, dict.packages.tier2Name, dict.packages.tier3Name]
   const packageIndex = PACKAGES.findIndex((tier) => tier.slug === packageSlug)
@@ -46,6 +45,8 @@ export default async function ContactPage({
           contactPhone={settings.contact_phone}
         />
       </Container>
+
+      {faqs && faqs.length > 0 && <FaqSection dict={dict} faqs={faqs} />}
     </ViewTransition>
   )
 }

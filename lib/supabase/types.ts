@@ -74,6 +74,66 @@ export type Database = {
         }
         Relationships: []
       }
+      faqs: {
+        Row: {
+          answer: string
+          category: string | null
+          created_at: string
+          id: string
+          published: boolean
+          question: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          category?: string | null
+          created_at?: string
+          id?: string
+          published?: boolean
+          question: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          category?: string | null
+          created_at?: string
+          id?: string
+          published?: boolean
+          question?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      page_meta: {
+        Row: {
+          id: string
+          og_image: string | null
+          page_path: string
+          seo_description: string | null
+          seo_title: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          og_image?: string | null
+          page_path: string
+          seo_description?: string | null
+          seo_title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          og_image?: string | null
+          page_path?: string
+          seo_description?: string | null
+          seo_title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       project_media: {
         Row: {
           alt: string | null
@@ -208,6 +268,33 @@ export type Database = {
         }
         Relationships: []
       }
+      site_content: {
+        Row: {
+          id: string
+          key: string
+          locale: string
+          section: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          locale: string
+          section: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          locale?: string
+          section?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           address: string | null
@@ -249,6 +336,84 @@ export type Database = {
           seo_title?: string | null
           social_links?: Json
           tagline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          bio: string | null
+          created_at: string
+          id: string
+          name: string
+          photo_url: string | null
+          published: boolean
+          role: string
+          social_links: Json
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          photo_url?: string | null
+          published?: boolean
+          role: string
+          social_links?: Json
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          photo_url?: string | null
+          published?: boolean
+          role?: string
+          social_links?: Json
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          avatar_url: string | null
+          client_company: string | null
+          client_name: string
+          client_title: string | null
+          created_at: string
+          id: string
+          published: boolean
+          quote: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          client_company?: string | null
+          client_name: string
+          client_title?: string | null
+          created_at?: string
+          id?: string
+          published?: boolean
+          quote: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          client_company?: string | null
+          client_name?: string
+          client_title?: string | null
+          created_at?: string
+          id?: string
+          published?: boolean
+          quote?: string
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []
@@ -305,6 +470,26 @@ export type ContactMessageUpdate = TablesUpdate<"contact_messages">
 
 export type SiteSettings = Tables<"site_settings">
 export type SiteSettingsUpdate = TablesUpdate<"site_settings">
+
+export type Testimonial = Tables<"testimonials">
+export type TestimonialInsert = TablesInsert<"testimonials">
+export type TestimonialUpdate = TablesUpdate<"testimonials">
+
+export type Faq = Tables<"faqs">
+export type FaqInsert = TablesInsert<"faqs">
+export type FaqUpdate = TablesUpdate<"faqs">
+
+export type TeamMember = Tables<"team_members">
+export type TeamMemberInsert = TablesInsert<"team_members">
+export type TeamMemberUpdate = TablesUpdate<"team_members">
+
+export type SiteContent = Tables<"site_content">
+export type SiteContentInsert = TablesInsert<"site_content">
+export type SiteContentUpdate = TablesUpdate<"site_content">
+
+export type PageMeta = Tables<"page_meta">
+export type PageMetaInsert = TablesInsert<"page_meta">
+export type PageMetaUpdate = TablesUpdate<"page_meta">
 
 export type ProjectWithMedia = Project & { project_media: ProjectMedia[] }
 

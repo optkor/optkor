@@ -62,6 +62,8 @@ const en = {
     aboutTitle: "A production partner, not another vendor.",
     aboutBody:
       "OPTKOR exists as the execution layer agencies call on when strategy needs to become image, video, and finished visual content — without losing control of the relationship, and without inviting competition into it.",
+    testimonialsEyebrow: "Client Word",
+    testimonialsTitle: "What partners say after we deliver.",
     ctaEyebrow: "Start a Project",
     ctaTitle: "Have a vision that needs production?",
     ctaBody: "Tell us what you're building. We'll tell you how we produce it.",
@@ -131,6 +133,8 @@ const en = {
       craft: "Craft",
       craftBody: "Production discipline behind every deliverable.",
     },
+    teamEyebrow: "The Team",
+    teamTitle: "Who you'll actually work with",
   },
   packages: {
     eyebrow: "Packages",
@@ -196,6 +200,8 @@ const en = {
     nameRequired: "Name is required",
     emailRequired: "Email is required",
     emailInvalid: "Enter a valid email",
+    faqEyebrow: "Questions",
+    faqTitle: "Before you reach out",
     directEmail: "Or email us directly at",
     packagePriceLabel: "Price",
   },

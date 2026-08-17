@@ -5,7 +5,9 @@ import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Button } from "@/components/ui/Button"
 import { Reveal } from "@/components/motion/Reveal"
 import { SectionCurtain } from "@/components/motion/SectionCurtain"
+import { TeamSection } from "@/components/about/TeamSection"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
+import { getPublishedTeamMembers } from "@/lib/queries/team"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dict } = await getDictionary()
@@ -13,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  const { dict } = await getDictionary()
+  const [{ dict }, { data: members }] = await Promise.all([getDictionary(), getPublishedTeamMembers()])
   const values = Object.entries(dict.about.values).reduce<
     { key: string; title: string; body: string }[]
   >((acc, [key, value]) => {
@@ -65,6 +67,12 @@ export default async function AboutPage() {
           </Container>
         </section>
       </SectionCurtain>
+
+      {members && members.length > 0 && (
+        <SectionCurtain>
+          <TeamSection dict={dict} members={members} />
+        </SectionCurtain>
+      )}
 
       <SectionCurtain>
         <section className="field-grain border-t border-line py-24">

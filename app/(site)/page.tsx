@@ -3,6 +3,7 @@ import { Hero } from "@/components/home/Hero"
 import { Capabilities } from "@/components/home/Capabilities"
 import { Process } from "@/components/home/Process"
 import { AboutTeaser } from "@/components/home/AboutTeaser"
+import { TestimonialsSection } from "@/components/home/TestimonialsSection"
 import { CtaSection } from "@/components/home/CtaSection"
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
@@ -12,12 +13,14 @@ import { ProjectGrid } from "@/components/work/ProjectGrid"
 import { ErrorState } from "@/components/ui/States"
 import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getPublishedProjects } from "@/lib/queries/projects"
+import { getPublishedTestimonials } from "@/lib/queries/testimonials"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
 export default async function HomePage() {
-  const [{ dict }, { data: projects, error }] = await Promise.all([
+  const [{ dict }, { data: projects, error }, { data: testimonials }] = await Promise.all([
     getDictionary(),
     getPublishedProjects({ featuredOnly: true }),
+    getPublishedTestimonials(),
   ])
 
   return (
@@ -74,6 +77,11 @@ export default async function HomePage() {
       <SectionCurtain>
         <AboutTeaser dict={dict} />
       </SectionCurtain>
+      {testimonials && testimonials.length > 0 && (
+        <SectionCurtain>
+          <TestimonialsSection dict={dict} testimonials={testimonials} />
+        </SectionCurtain>
+      )}
       <SectionCurtain>
         <CtaSection dict={dict} />
       </SectionCurtain>
