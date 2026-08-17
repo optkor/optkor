@@ -7,11 +7,21 @@ import { gsap, ScrollTrigger } from "@/lib/motion/gsap"
 
 /**
  * The signature transition between major sections sitewide: each section
- * rises into place — a rounded mask unfurling to full-bleed while it
- * settles from a slight scale — scrubbed directly to scroll position via
- * GSAP ScrollTrigger. This is what makes moving from one section to the
- * next read as a designed beat instead of a plain scroll-into-view fade.
- * Renders a plain div — wrap it in a semantic <section> at the call site.
+ * rises into place — a rounded mask unfurling to full-bleed — scrubbed
+ * directly to scroll position via GSAP ScrollTrigger. This is what makes
+ * moving from one section to the next read as a designed beat instead of a
+ * plain scroll-into-view fade. Renders a plain div — wrap it in a semantic
+ * <section> at the call site.
+ *
+ * Deliberately clip-path only, no transform/scale: per the CSS spec, any
+ * ancestor with a `transform` (or `will-change: transform`) becomes the
+ * containing block for descendant `position: fixed` elements. A GSAP
+ * ScrollTrigger `pin: true` inside a curtained section (Process, Services)
+ * relies on `position: fixed` resolving against the *viewport* — with a
+ * transform on this wrapper, the pinned content was instead fixed relative
+ * to this scrolling div, drifting off-screen for the whole pinned scroll
+ * range. clip-path does not create a containing block, so it doesn't have
+ * this failure mode.
  */
 export function SectionCurtain({ children, className }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -22,11 +32,9 @@ export function SectionCurtain({ children, className }: { children: ReactNode; c
       if (shouldReduceMotion || !ref.current) return
       const el = ref.current
 
-      gsap.set(el, { clipPath: "inset(6% round 28px)", scale: 0.94, y: 24 })
+      gsap.set(el, { clipPath: "inset(6% round 28px)" })
       gsap.to(el, {
         clipPath: "inset(0% round 0px)",
-        scale: 1,
-        y: 0,
         ease: "none",
         scrollTrigger: {
           trigger: el,
@@ -40,7 +48,7 @@ export function SectionCurtain({ children, className }: { children: ReactNode; c
   )
 
   return (
-    <div ref={ref} className={className} style={{ willChange: "clip-path, transform" }}>
+    <div ref={ref} className={className} style={{ willChange: "clip-path" }}>
       {children}
     </div>
   )
