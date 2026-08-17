@@ -1,5 +1,6 @@
 import { SafeImage, VideoPlayer } from "@/components/ui/Media"
 import { Reveal } from "@/components/motion/Reveal"
+import { FrameMark } from "@/components/motion/FrameMark"
 import type { ProjectMedia } from "@/lib/supabase/types"
 
 const ASPECTS = ["aspect-[4/3]", "aspect-[3/4]", "aspect-square", "aspect-[4/3]"]
@@ -20,6 +21,7 @@ export function MediaGallery({ media }: { media: ProjectMedia[] }) {
             className={wide ? "sm:col-span-2" : undefined}
           >
             <figure className="relative overflow-hidden bg-ink-3">
+              <FrameMark />
               {item.type === "video" ? (
                 <VideoPlayer src={item.url} className={aspect} />
               ) : (

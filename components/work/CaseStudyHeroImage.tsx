@@ -5,6 +5,7 @@ import { ViewTransition } from "react"
 import { useReducedMotion } from "framer-motion"
 import { useGSAP } from "@gsap/react"
 import { SafeImage } from "@/components/ui/Media"
+import { FrameMark } from "@/components/motion/FrameMark"
 import { gsap } from "@/lib/motion/gsap"
 
 export function CaseStudyHeroImage({
@@ -43,6 +44,7 @@ export function CaseStudyHeroImage({
           <SafeImage src={src} alt={alt} fill priority sizes="100vw" className="object-cover" />
         </ViewTransition>
       </div>
+      <FrameMark className="m-4 md:m-6" />
     </div>
   )
 }
