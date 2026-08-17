@@ -31,6 +31,7 @@ const en = {
     scroll: "Scroll",
     view: "View",
     start: "Start",
+    open: "Open",
   },
   home: {
     heroEyebrow: "B2B Visual Production",

@@ -33,6 +33,7 @@ const ar = {
     scroll: "مرر للأسفل",
     view: "عرض",
     start: "ابدأ",
+    open: "فتح",
   },
   home: {
     heroEyebrow: "إنتاج بصري لشركات B2B",

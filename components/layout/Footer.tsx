@@ -24,6 +24,10 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
     onMouseEnter: () => cursor.setCursor("link"),
     onMouseLeave: () => cursor.resetCursor(),
   }
+  const openHover = {
+    onMouseEnter: () => cursor.setCursor("open", dict.common.open),
+    onMouseLeave: () => cursor.resetCursor(),
+  }
 
   const shouldReduceMotion = useReducedMotion()
   const footerRef = useRef<HTMLElement>(null)
@@ -102,7 +106,7 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
             {settings.contact_email && (
               <a
                 href={`mailto:${settings.contact_email}`}
-                {...linkHover}
+                {...openHover}
                 className="w-fit text-sm text-paper transition-colors hover:text-accent"
               >
                 {settings.contact_email}
@@ -111,7 +115,7 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
             {settings.contact_phone && (
               <a
                 href={`tel:${settings.contact_phone}`}
-                {...linkHover}
+                {...openHover}
                 className="w-fit text-sm text-paper transition-colors hover:text-accent"
               >
                 {settings.contact_phone}
@@ -123,7 +127,7 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                {...linkHover}
+                {...openHover}
                 className="w-fit text-sm capitalize text-paper transition-colors hover:text-accent"
               >
                 {platform}
