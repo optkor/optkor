@@ -7,7 +7,6 @@ import { useReducedMotion } from "framer-motion"
 import { useGSAP } from "@gsap/react"
 import { SafeImage } from "@/components/ui/Media"
 import { Reveal } from "@/components/motion/Reveal"
-import { FrameMark } from "@/components/motion/FrameMark"
 import { gsap } from "@/lib/motion/gsap"
 import type { Project } from "@/lib/supabase/types"
 
@@ -83,17 +82,10 @@ export function ProjectFeature({ project }: { project: Project }) {
             </ViewTransition>
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
-          <FrameMark className="m-4 md:m-6" delay={0.3} />
 
           <div ref={titleRef} className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6 md:p-10">
-            <p className="inline-flex w-fit items-baseline gap-[0.35em] text-xs uppercase tracking-wider text-accent">
-              <span aria-hidden className="text-accent/50">
-                [
-              </span>
+            <p className="text-xs uppercase tracking-wider text-accent">
               {[project.client, project.category].filter(Boolean).join(" · ") || "Featured"}
-              <span aria-hidden className="text-accent/50">
-                ]
-              </span>
             </p>
             <ViewTransition name={`project-title-${project.id}`} share="auto">
               <h3 className="font-display max-w-3xl text-[clamp(1.75rem,5vw,3.5rem)] leading-[1.02] text-paper transition-colors group-hover:text-accent">

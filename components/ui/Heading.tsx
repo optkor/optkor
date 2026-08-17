@@ -22,27 +22,17 @@ export function Heading({ as = "h2", size = "lg", className, children, ...props 
   )
 }
 
-/**
- * OPTKOR's slate/tag treatment for section labels — bracketed like a shot
- * label or frame index instead of the generic "rule + caps" eyebrow
- * pattern. One shared component, so every page picks this up automatically.
- */
 export function Eyebrow({ className, children, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
       className={cn(
-        "inline-flex items-baseline gap-[0.35em] font-sans text-xs font-semibold uppercase tracking-[0.3em] text-accent",
+        "inline-flex items-center gap-3 font-sans text-xs font-medium uppercase tracking-[0.25em] text-accent",
         className
       )}
       {...props}
     >
-      <span aria-hidden className="text-accent/45">
-        [
-      </span>
+      <span aria-hidden className="h-px w-8 bg-accent" />
       {children}
-      <span aria-hidden className="text-accent/45">
-        ]
-      </span>
     </span>
   )
 }

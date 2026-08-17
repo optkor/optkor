@@ -7,7 +7,6 @@ import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-moti
 import { useGSAP } from "@gsap/react"
 import { SafeImage } from "@/components/ui/Media"
 import { Reveal } from "@/components/motion/Reveal"
-import { FrameMark } from "@/components/motion/FrameMark"
 import { gsap } from "@/lib/motion/gsap"
 import type { Project } from "@/lib/supabase/types"
 
@@ -98,7 +97,6 @@ export function ProjectCard({
               )}
             </ViewTransition>
           </div>
-          <FrameMark className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <span
             aria-hidden
             className="font-display absolute start-4 top-4 text-xs text-paper-dim opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -106,14 +104,8 @@ export function ProjectCard({
             {String(index + 1).padStart(2, "0")}
           </span>
           <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/85 via-ink/5 to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-            <p className="inline-flex items-baseline gap-[0.35em] text-xs uppercase tracking-wider text-paper-dim">
-              <span aria-hidden className="text-accent/70">
-                [
-              </span>
+            <p className="text-xs uppercase tracking-wider text-paper-dim">
               {[project.client, project.category].filter(Boolean).join(" · ")}
-              <span aria-hidden className="text-accent/70">
-                ]
-              </span>
             </p>
           </div>
         </motion.div>
