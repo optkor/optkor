@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react"
 import { Container } from "@/components/ui/Container"
 import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Reveal } from "@/components/motion/Reveal"
+import { FrameMark } from "@/components/motion/FrameMark"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { gsap } from "@/lib/motion/gsap"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
@@ -85,6 +86,7 @@ export function Process({ dict }: { dict: Dictionary }) {
       {/* Desktop pinned horizontal journey */}
       {journeyEnabled ? (
         <div ref={pinRef} className="relative mt-16 hidden h-screen overflow-hidden lg:block">
+          <FrameMark className="m-6" />
           <div className="absolute inset-x-0 top-0">
             <Container>
               <span aria-hidden className="relative block h-px w-full bg-line">
