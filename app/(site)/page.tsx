@@ -21,12 +21,18 @@ import { resolvePageMetadata } from "@/lib/seo/resolve-page-metadata"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await getSiteSettings()
-  return resolvePageMetadata("/", {
+  const metadata = await resolvePageMetadata("/", {
     title: settings.seo_title ?? "OPTKOR — Visual Production Company",
     description:
       settings.seo_description ??
       "OPTKOR is a B2B visual production partner for marketing agencies and brands.",
   })
+
+  // The root layout's title template ("%s — OPTKOR") appends the site name
+  // to any string title a page provides. The home page's title IS the site
+  // name already, so it needs `absolute` to render as-is instead of
+  // becoming "OPTKOR — Visual Production Company — OPTKOR".
+  return { ...metadata, title: { absolute: metadata.title as string } }
 }
 
 export default async function HomePage() {
