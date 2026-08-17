@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, type MouseEvent } from "react"
+import { useEffect, useRef, useState, type MouseEvent } from "react"
 import Image from "next/image"
 import dynamic from "next/dynamic"
 import {
@@ -66,6 +66,22 @@ export function Hero({ dict }: { dict: Dictionary }) {
   const secondaryRef = useRef<HTMLDivElement>(null)
   const secondaryMagnetic = useMagnetic(secondaryRef, 0.3)
 
+  // The WebGL field only needs to render while it's actually visible. Left
+  // unguarded, its useFrame loop keeps ticking at 60fps for the rest of the
+  // page's lifetime once mounted — pure wasted GPU/main-thread work competing
+  // with GSAP's ScrollTrigger pinning further down the page (Process,
+  // Services), which is exactly the kind of thing that reads as scroll jank.
+  const [heroVisible, setHeroVisible] = useState(true)
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el || typeof IntersectionObserver === "undefined") return
+    const observer = new IntersectionObserver(([entry]) => setHeroVisible(entry.isIntersecting), {
+      rootMargin: "200px 0px",
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   const capabilities = Object.values(dict.capabilities)
   const showScene = hasFinePointer
 
@@ -90,7 +106,11 @@ export function Hero({ dict }: { dict: Dictionary }) {
             transition={{ duration: 1.3, ease: EASE }}
             className="absolute inset-0"
           >
-            <HeroScene scrollProgress={scrollYProgress} colors={colors} interactive={!shouldReduceMotion} />
+            <HeroScene
+              scrollProgress={scrollYProgress}
+              colors={colors}
+              interactive={!shouldReduceMotion && heroVisible}
+            />
           </motion.div>
         ) : (
           <div aria-hidden className="field-grain pointer-events-none absolute inset-0" />

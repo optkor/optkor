@@ -37,6 +37,18 @@ function Field({ scrollProgress, colors }: { scrollProgress: MotionValue<number>
     }
   }, [])
 
+  // Colors only actually change on a theme toggle, not every frame — Color.set()
+  // parses a hex string every call, so re-running it 60x/sec for a value that's
+  // static 99.9% of the time was pure waste. Keyed on the colors object identity
+  // from useThemeColors(), which is itself cached and only reallocated on change.
+  useEffect(() => {
+    const material = materialRef.current
+    if (!material) return
+    material.uniforms.uColorBg.value.set(colors.bg)
+    material.uniforms.uColorFg.value.set(colors.fg)
+    material.uniforms.uColorAccent.value.set(colors.accent)
+  }, [colors])
+
   useFrame((state, delta) => {
     const material = materialRef.current
     if (!material) return
@@ -49,9 +61,6 @@ function Field({ scrollProgress, colors }: { scrollProgress: MotionValue<number>
       mouseStrengthTarget.current,
       1 - Math.pow(0.001, delta)
     )
-    material.uniforms.uColorBg.value.set(colors.bg)
-    material.uniforms.uColorFg.value.set(colors.fg)
-    material.uniforms.uColorAccent.value.set(colors.accent)
   })
 
   return (
