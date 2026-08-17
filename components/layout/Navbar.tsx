@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container"
 import { LanguageSwitcher } from "./LanguageSwitcher"
 import { Logo } from "./Logo"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
+import { FrameMark } from "@/components/motion/FrameMark"
 import { useMagnetic } from "@/hooks/useMagnetic"
 import type { Dictionary } from "@/lib/i18n/dictionaries/en"
 import type { Locale } from "@/lib/i18n/config"
@@ -104,10 +105,12 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
               style={magnetic.style}
               onMouseMove={magnetic.onMouseMove}
               onMouseLeave={magnetic.onMouseLeave}
+              className="group relative"
             >
+              <FrameMark className="opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
               <Link
                 href="/contact"
-                className="border border-line-strong px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-paper transition-colors hover:border-accent hover:text-accent"
+                className="block px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-paper transition-colors group-hover:text-accent"
               >
                 {dict.nav.startProject}
               </Link>
@@ -190,13 +193,16 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
                 className="flex items-center justify-between border-t border-line pt-6"
               >
                 <LanguageSwitcher locale={locale} />
-                <Link
-                  href="/contact"
-                  onClick={() => setOpen(false)}
-                  className="border border-line-strong px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-accent"
-                >
-                  {dict.nav.startProject}
-                </Link>
+                <span className="relative">
+                  <FrameMark />
+                  <Link
+                    href="/contact"
+                    onClick={() => setOpen(false)}
+                    className="block px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-accent"
+                  >
+                    {dict.nav.startProject}
+                  </Link>
+                </span>
               </motion.div>
             </Container>
           </motion.div>
