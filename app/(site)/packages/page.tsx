@@ -5,9 +5,11 @@ import { Eyebrow, Heading } from "@/components/ui/Heading"
 import { Reveal } from "@/components/motion/Reveal"
 import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { PackagesGrid } from "@/components/packages/PackagesGrid"
+import { CustomPackageCta } from "@/components/packages/CustomPackageCta"
 import { PACKAGES } from "@/lib/data/packages"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getSiteSettings } from "@/lib/queries/settings"
+import { getWhatsAppHref } from "@/lib/utils/whatsapp"
 
 export const metadata: Metadata = {
   title: "Packages",
@@ -35,9 +37,7 @@ export default async function PackagesPage() {
     },
   ]
 
-  const whatsappHref = settings.contact_phone
-    ? `https://wa.me/${settings.contact_phone.replace(/\D/g, "")}`
-    : null
+  const whatsappHref = getWhatsAppHref(settings.contact_phone)
 
   return (
     <ViewTransition default="page-transition">
@@ -57,7 +57,13 @@ export default async function PackagesPage() {
 
       <SectionCurtain>
         <Container className="pb-24 md:pb-32">
-          <PackagesGrid tiers={PACKAGES} tierContent={tierContent} requestLabel={dict.packages.requestCta} />
+          <PackagesGrid tiers={PACKAGES} tierContent={tierContent} exploreLabel={dict.packages.exploreCta} />
+
+          <CustomPackageCta
+            title={dict.packages.customTitle}
+            body={dict.packages.customBody}
+            cta={dict.packages.customCta}
+          />
 
           {(settings.contact_email || whatsappHref) && (
             <Reveal

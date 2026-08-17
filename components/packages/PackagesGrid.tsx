@@ -17,11 +17,11 @@ type TierContent = { name: string; badgeLabel: string; positioning: string }
 export function PackagesGrid({
   tiers,
   tierContent,
-  requestLabel,
+  exploreLabel,
 }: {
   tiers: PackageTier[]
   tierContent: TierContent[]
-  requestLabel: string
+  exploreLabel: string
 }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const shouldReduceMotion = useReducedMotion()
@@ -71,7 +71,7 @@ export function PackagesGrid({
             key={tier.slug}
             tier={tier}
             delay={Math.min(index * 0.08, 0.3)}
-            requestLabel={requestLabel}
+            exploreLabel={exploreLabel}
             dominant={activeIndex === index}
             dimmed={activeIndex !== null && activeIndex !== index}
             onActivate={(el) => setActive(index, el)}

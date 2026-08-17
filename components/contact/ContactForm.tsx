@@ -36,15 +36,31 @@ function SubmitButton({ dict }: { dict: Dictionary }) {
 
 export function ContactForm({
   dict,
+  mode = "general",
   packageName,
+  packagePrice,
   requestingLabel,
 }: {
   dict: Dictionary
+  /**
+   * "package": a predefined package was selected — scope/price are already
+   *   known, so Project Type/Budget/Timeline are dropped and the subject is
+   *   set automatically instead of asked again.
+   * "custom": a custom-scope inquiry — same dropped fields, but Subject and
+   *   Message are relabeled to ask what's needed instead of assuming a
+   *   catalog project type.
+   * "general": the existing Start a Project flow, unchanged.
+   */
+  mode?: "package" | "custom" | "general"
   packageName?: string | null
+  packagePrice?: string | null
   requestingLabel?: string
 }) {
   const [state, formAction] = useActionState(submitContactMessage, initialState)
   const shouldReduceMotion = useReducedMotion()
+  const isPackage = mode === "package"
+  const isCustom = mode === "custom"
+  const showCatalogFields = mode === "general"
 
   const formRef = useRef<HTMLFormElement>(null)
   const glowY = useMotionValue(0)
@@ -124,13 +140,29 @@ export function ContactForm({
           <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" />
         </div>
 
-        {packageName && (
-          <motion.p
+        {/* Fields dropped from the visible form still need a defined (even
+            empty) value submitted, since the validation schema expects a
+            string, not a missing field. */}
+        {!showCatalogFields && (
+          <>
+            <input type="hidden" name="project_type" value="" />
+            <input type="hidden" name="budget_range" value="" />
+            <input type="hidden" name="timeline" value="" />
+          </>
+        )}
+        {isPackage && <input type="hidden" name="subject" value={`Package inquiry: ${packageName}`} />}
+
+        {(isPackage || isCustom) && (
+          <motion.div
             variants={fieldRow}
-            className="inline-flex w-fit items-center gap-2 border border-accent/30 px-4 py-2 text-xs uppercase tracking-wider text-accent"
+            className="flex flex-wrap items-center justify-between gap-3 border border-accent/30 px-4 py-3 text-xs uppercase tracking-wider text-accent"
           >
-            {requestingLabel}: {packageName}
-          </motion.p>
+            <span>
+              {requestingLabel}
+              {isPackage && `: ${packageName}`}
+            </span>
+            {isPackage && packagePrice && <span className="font-display text-sm normal-case tracking-normal">{packagePrice}</span>}
+          </motion.div>
         )}
 
         <motion.div variants={fieldRow} className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -148,52 +180,55 @@ export function ContactForm({
           </FormField>
         </motion.div>
 
-        <motion.div variants={fieldRow}>
-          <FormField label={dict.contact.formSubject} htmlFor="subject" error={state.fieldErrors?.subject?.[0]}>
-            <Input
-              id="subject"
-              name="subject"
-              maxLength={300}
-              defaultValue={packageName ? `Package inquiry: ${packageName}` : undefined}
-            />
-          </FormField>
-        </motion.div>
+        {!isPackage && (
+          <motion.div variants={fieldRow}>
+            <FormField
+              label={isCustom ? dict.contact.formCustomNeed : dict.contact.formSubject}
+              htmlFor="subject"
+              error={state.fieldErrors?.subject?.[0]}
+            >
+              <Input id="subject" name="subject" maxLength={300} />
+            </FormField>
+          </motion.div>
+        )}
 
-        <motion.div variants={fieldRow} className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          <FormField label={dict.contact.formProjectType} htmlFor="project_type">
-            <Select id="project_type" name="project_type" defaultValue="">
-              <option value="">—</option>
-              <option value="Visual Identity">Visual Identity</option>
-              <option value="Social Design & Campaigns">Social Design & Campaigns</option>
-              <option value="Motion Graphics">Motion Graphics</option>
-              <option value="Video Editing">Video Editing</option>
-              <option value="Photography">Photography</option>
-              <option value="Other">Other</option>
-            </Select>
-          </FormField>
-          <FormField label={dict.contact.formBudget} htmlFor="budget_range">
-            <Select id="budget_range" name="budget_range" defaultValue="">
-              <option value="">—</option>
-              <option value="< $5,000">{"< $5,000"}</option>
-              <option value="$5,000 – $15,000">$5,000 – $15,000</option>
-              <option value="$15,000 – $50,000">$15,000 – $50,000</option>
-              <option value="$50,000+">$50,000+</option>
-            </Select>
-          </FormField>
-          <FormField label={dict.contact.formTimeline} htmlFor="timeline">
-            <Select id="timeline" name="timeline" defaultValue="">
-              <option value="">—</option>
-              <option value="ASAP">ASAP</option>
-              <option value="1–4 weeks">1–4 weeks</option>
-              <option value="1–3 months">1–3 months</option>
-              <option value="Flexible">Flexible</option>
-            </Select>
-          </FormField>
-        </motion.div>
+        {showCatalogFields && (
+          <motion.div variants={fieldRow} className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <FormField label={dict.contact.formProjectType} htmlFor="project_type">
+              <Select id="project_type" name="project_type" defaultValue="">
+                <option value="">—</option>
+                <option value="Visual Identity">Visual Identity</option>
+                <option value="Social Design & Campaigns">Social Design & Campaigns</option>
+                <option value="Motion Graphics">Motion Graphics</option>
+                <option value="Video Editing">Video Editing</option>
+                <option value="Photography">Photography</option>
+                <option value="Other">Other</option>
+              </Select>
+            </FormField>
+            <FormField label={dict.contact.formBudget} htmlFor="budget_range">
+              <Select id="budget_range" name="budget_range" defaultValue="">
+                <option value="">—</option>
+                <option value="< $5,000">{"< $5,000"}</option>
+                <option value="$5,000 – $15,000">$5,000 – $15,000</option>
+                <option value="$15,000 – $50,000">$15,000 – $50,000</option>
+                <option value="$50,000+">$50,000+</option>
+              </Select>
+            </FormField>
+            <FormField label={dict.contact.formTimeline} htmlFor="timeline">
+              <Select id="timeline" name="timeline" defaultValue="">
+                <option value="">—</option>
+                <option value="ASAP">ASAP</option>
+                <option value="1–4 weeks">1–4 weeks</option>
+                <option value="1–3 months">1–3 months</option>
+                <option value="Flexible">Flexible</option>
+              </Select>
+            </FormField>
+          </motion.div>
+        )}
 
         <motion.div variants={fieldRow}>
           <FormField
-            label={dict.contact.formMessage}
+            label={isCustom ? dict.contact.formCustomDetails : dict.contact.formMessage}
             htmlFor="message"
             required
             error={state.fieldErrors?.message?.[0]}

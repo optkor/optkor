@@ -14,7 +14,7 @@ export function PackageCard({
   name,
   badgeLabel,
   positioning,
-  requestLabel,
+  exploreLabel,
   delay = 0,
   dominant = false,
   dimmed = false,
@@ -25,7 +25,7 @@ export function PackageCard({
   name: string
   badgeLabel: string
   positioning: string
-  requestLabel: string
+  exploreLabel: string
   delay?: number
   dominant?: boolean
   dimmed?: boolean
@@ -92,7 +92,7 @@ export function PackageCard({
             ref={ctaRef}
             style={magnetic.style}
             onMouseMove={magnetic.onMouseMove}
-            onMouseEnter={() => cursor.setCursor("start")}
+            onMouseEnter={() => cursor.setCursor("explore", exploreLabel)}
             onMouseLeave={() => {
               magnetic.onMouseLeave?.()
               cursor.resetCursor()
@@ -100,7 +100,7 @@ export function PackageCard({
             className="mt-6"
           >
             <Link
-              href={`/contact?package=${tier.slug}`}
+              href={`/packages/${tier.slug}`}
               className={cn(
                 "inline-flex w-full items-center justify-center px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] transition-colors",
                 isPremium
@@ -108,7 +108,7 @@ export function PackageCard({
                   : "border border-line-strong text-paper hover:border-accent hover:text-accent"
               )}
             >
-              {requestLabel}
+              {exploreLabel}
             </Link>
           </motion.div>
         </div>
