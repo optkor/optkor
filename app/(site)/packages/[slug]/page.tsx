@@ -28,9 +28,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const index = getTierIndex(slug)
-  if (index === -1) return { title: "Package not found" }
-
   const { dict } = await getDictionary()
+  if (index === -1) return { title: dict.packages.notFoundTitle }
+
   const key = TIER_KEYS[index]
   return {
     title: dict.packages[`${key}Name`],
@@ -44,8 +44,8 @@ export default async function PackageDetailPage({ params }: Props) {
   if (index === -1) notFound()
 
   const tier = PACKAGES[index]
-  const detail = PACKAGE_DETAILS[slug]
-  const [{ dict }, { data: settings }] = await Promise.all([getDictionary(), getSiteSettings()])
+  const [{ dict, locale }, { data: settings }] = await Promise.all([getDictionary(), getSiteSettings()])
+  const detail = PACKAGE_DETAILS[locale][slug]
 
   const key = TIER_KEYS[index]
   const name = dict.packages[`${key}Name`]
@@ -94,11 +94,11 @@ export default async function PackageDetailPage({ params }: Props) {
             <div className="flex flex-col gap-16">
               <div>
                 <Eyebrow>{dict.packages.whatYouBuy}</Eyebrow>
-                <p className="font-display mt-5 max-w-2xl text-2xl leading-snug text-paper md:text-3xl" dir="rtl">
+                <p className="font-display mt-5 max-w-2xl text-2xl leading-snug text-paper md:text-3xl">
                   {detail.whatYouBuy}
                 </p>
                 {detail.notes && (
-                  <ul className="mt-4 flex flex-col gap-1.5" dir="rtl">
+                  <ul className="mt-4 flex flex-col gap-1.5">
                     {detail.notes.map((note) => (
                       <li key={note} className="text-sm text-accent">
                         {note}
@@ -111,7 +111,7 @@ export default async function PackageDetailPage({ params }: Props) {
               <div className="grid grid-cols-1 gap-12 sm:grid-cols-2">
                 <div>
                   <Eyebrow>{dict.packages.whatYouGet}</Eyebrow>
-                  <ul className="mt-5 flex flex-col gap-3" dir="rtl">
+                  <ul className="mt-5 flex flex-col gap-3">
                     {detail.includes.map((item) => (
                       <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-paper">
                         <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
@@ -122,7 +122,7 @@ export default async function PackageDetailPage({ params }: Props) {
                 </div>
                 <div>
                   <Eyebrow>{dict.packages.whatYouDontGet}</Eyebrow>
-                  <ul className="mt-5 flex flex-col gap-3" dir="rtl">
+                  <ul className="mt-5 flex flex-col gap-3">
                     {detail.notIncludes.map((item) => (
                       <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-paper-dim">
                         <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-line-strong" />
@@ -136,7 +136,7 @@ export default async function PackageDetailPage({ params }: Props) {
               <div className="grid grid-cols-1 gap-12 sm:grid-cols-2">
                 <div>
                   <Eyebrow>{dict.packages.howItWorks}</Eyebrow>
-                  <ul className="mt-5 flex flex-col gap-3" dir="rtl">
+                  <ul className="mt-5 flex flex-col gap-3">
                     {detail.workflow.map((item, i) => (
                       <li key={item} className="flex items-baseline gap-3 text-sm leading-relaxed text-paper">
                         <span aria-hidden className="font-display text-xs text-muted">
@@ -149,7 +149,7 @@ export default async function PackageDetailPage({ params }: Props) {
                 </div>
                 <div>
                   <Eyebrow>{dict.packages.whoItsFor}</Eyebrow>
-                  <ul className="mt-5 flex flex-col gap-3" dir="rtl">
+                  <ul className="mt-5 flex flex-col gap-3">
                     {detail.bestFor.map((item) => (
                       <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-paper">
                         <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
@@ -159,8 +159,6 @@ export default async function PackageDetailPage({ params }: Props) {
                   </ul>
                 </div>
               </div>
-
-              <p className="text-xs text-muted">{dict.packages.detailNote}</p>
             </div>
 
             {/* Price + request panel — sticky on desktop so it stays in view while reading scope */}

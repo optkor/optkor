@@ -22,10 +22,10 @@ const transition = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const { data: project } = await getProjectBySlug(slug)
+  const [{ data: project }, { dict }] = await Promise.all([getProjectBySlug(slug), getDictionary()])
 
   if (!project) {
-    return { title: "Project not found" }
+    return { title: dict.caseStudy.notFoundTitle }
   }
 
   return {

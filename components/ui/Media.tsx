@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image, { type ImageProps } from "next/image"
 import { cn } from "@/lib/utils/cn"
 
-type SafeImageProps = Omit<ImageProps, "onError" | "alt"> & { alt: string }
+type SafeImageProps = Omit<ImageProps, "onError" | "alt"> & { alt: string; unavailableLabel?: string }
 
 /**
  * next/image throws synchronously (a page-crashing render error, not a
@@ -26,7 +26,13 @@ function isAllowedImageSrc(src: ImageProps["src"]): boolean {
   }
 }
 
-export function SafeImage({ className, alt, src, ...props }: SafeImageProps) {
+export function SafeImage({
+  className,
+  alt,
+  src,
+  unavailableLabel = "Image unavailable",
+  ...props
+}: SafeImageProps) {
   const [failed, setFailed] = useState(false)
 
   if (failed || !isAllowedImageSrc(src)) {
@@ -36,7 +42,7 @@ export function SafeImage({ className, alt, src, ...props }: SafeImageProps) {
         aria-label={alt}
         className={cn("flex items-center justify-center bg-ink-3 text-muted", className)}
       >
-        <span className="text-xs uppercase tracking-widest">Image unavailable</span>
+        <span className="text-xs uppercase tracking-widest">{unavailableLabel}</span>
       </div>
     )
   }
@@ -48,10 +54,12 @@ export function VideoPlayer({
   src,
   className,
   poster,
+  fallbackLabel = "Your browser does not support embedded video.",
 }: {
   src: string
   className?: string
   poster?: string
+  fallbackLabel?: string
 }) {
   return (
     <video
@@ -62,7 +70,7 @@ export function VideoPlayer({
       preload="metadata"
       className={cn("h-full w-full bg-ink-3 object-cover", className)}
     >
-      Your browser does not support embedded video.
+      {fallbackLabel}
     </video>
   )
 }

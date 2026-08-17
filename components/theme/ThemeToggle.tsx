@@ -44,7 +44,15 @@ function MoonIcon() {
   )
 }
 
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({
+  className,
+  labelToDark = "Switch to dark mode",
+  labelToLight = "Switch to light mode",
+}: {
+  className?: string
+  labelToDark?: string
+  labelToLight?: string
+}) {
   // Reads the `data-theme` attribute the blocking script (ThemeScript) set
   // pre-paint, via useSyncExternalStore rather than useEffect+setState —
   // server/first-hydration render gets `null` (matching, no mismatch),
@@ -67,7 +75,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       type="button"
       onClick={toggle}
-      aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+      aria-label={theme === "light" ? labelToDark : labelToLight}
       className={className}
     >
       {theme === null ? <span className="block h-4 w-4" /> : theme === "light" ? <MoonIcon /> : <SunIcon />}

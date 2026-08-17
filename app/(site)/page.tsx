@@ -28,7 +28,7 @@ export default async function HomePage() {
         <section className="border-t border-line py-24 md:py-32">
           <SectionCurtain>
             <Container>
-              <ErrorState body={dict.common.somethingWrong} />
+              <ErrorState title={dict.common.somethingWrong} />
             </Container>
           </SectionCurtain>
         </section>

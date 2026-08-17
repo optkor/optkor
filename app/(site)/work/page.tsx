@@ -10,9 +10,9 @@ import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getPublishedProjects, getProjectCategories } from "@/lib/queries/projects"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
-export const metadata: Metadata = {
-  title: "Work",
-  description: "Selected visual production work by OPTKOR for marketing agencies and brands.",
+export async function generateMetadata(): Promise<Metadata> {
+  const { dict } = await getDictionary()
+  return { title: dict.work.title, description: dict.work.subtitle }
 }
 
 export default async function WorkPage({
@@ -54,7 +54,7 @@ export default async function WorkPage({
 
       {projectsRes.error ? (
         <Container className="pb-24 md:pb-32">
-          <ErrorState body={dict.common.somethingWrong} />
+          <ErrorState title={dict.common.somethingWrong} />
         </Container>
       ) : projects.length > 0 ? (
         <SectionCurtain>

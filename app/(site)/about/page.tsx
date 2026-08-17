@@ -7,9 +7,9 @@ import { Reveal } from "@/components/motion/Reveal"
 import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
-export const metadata: Metadata = {
-  title: "About",
-  description: "The story of OPTKOR — a visual production partner for marketing agencies and brands.",
+export async function generateMetadata(): Promise<Metadata> {
+  const { dict } = await getDictionary()
+  return { title: dict.about.title, description: dict.home.aboutBody }
 }
 
 export default async function AboutPage() {

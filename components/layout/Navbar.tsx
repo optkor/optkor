@@ -68,8 +68,8 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
         )}
       >
         <Container className="flex h-20 items-center justify-between">
-          <Link href="/" aria-label="OPTKOR — home" onClick={() => setOpen(false)} className="relative z-10">
-            <Logo height={26} />
+          <Link href="/" aria-label={dict.common.homeLabel} onClick={() => setOpen(false)} className="relative z-10">
+            <Logo height={26} alt={dict.common.logoAlt} />
           </Link>
 
           <nav className="hidden items-center gap-10 md:flex">
@@ -97,7 +97,11 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           </nav>
 
           <div className="hidden items-center gap-6 md:flex">
-            <ThemeToggle className="text-paper transition-colors hover:text-accent" />
+            <ThemeToggle
+              className="text-paper transition-colors hover:text-accent"
+              labelToDark={dict.common.switchToDark}
+              labelToLight={dict.common.switchToLight}
+            />
             <LanguageSwitcher locale={locale} />
             <motion.div
               ref={magneticRef}
@@ -119,12 +123,16 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           </div>
 
           <div className="flex items-center gap-4 md:hidden">
-            <ThemeToggle className="relative z-10 text-paper" />
+            <ThemeToggle
+              className="relative z-10 text-paper"
+              labelToDark={dict.common.switchToDark}
+              labelToLight={dict.common.switchToLight}
+            />
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
-              aria-label={open ? "Close menu" : "Open menu"}
+              aria-label={open ? dict.common.closeMenu : dict.common.openMenu}
               className="relative z-10 flex h-10 w-10 flex-col items-center justify-center gap-1.5"
             >
               <span

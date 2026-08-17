@@ -11,9 +11,9 @@ import { getDictionary } from "@/lib/i18n/get-dictionary"
 import { getSiteSettings } from "@/lib/queries/settings"
 import { getWhatsAppHref } from "@/lib/utils/whatsapp"
 
-export const metadata: Metadata = {
-  title: "Packages",
-  description: "Ongoing monthly production partnerships with OPTKOR.",
+export async function generateMetadata(): Promise<Metadata> {
+  const { dict } = await getDictionary()
+  return { title: dict.packages.title, description: dict.packages.subtitle }
 }
 
 export default async function PackagesPage() {

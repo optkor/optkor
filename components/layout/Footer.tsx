@@ -69,7 +69,7 @@ export function Footer({ dict, settings }: { dict: Dictionary; settings: SiteSet
       />
       <Container className="relative grid grid-cols-1 gap-12 py-20 md:grid-cols-[1.4fr_1fr_1fr] md:py-24">
         <div>
-          <Logo height={26} />
+          <Logo height={26} alt={dict.common.logoAlt} />
           <p className="font-display mt-6 max-w-xs text-xl leading-snug text-paper-dim">
             {settings.tagline ?? dict.footer.tagline}
           </p>

@@ -10,9 +10,9 @@ import { SectionCurtain } from "@/components/motion/SectionCurtain"
 import { getPublishedServices } from "@/lib/queries/services"
 import { getDictionary } from "@/lib/i18n/get-dictionary"
 
-export const metadata: Metadata = {
-  title: "Services",
-  description: "OPTKOR's visual production capabilities for marketing agencies and brands.",
+export async function generateMetadata(): Promise<Metadata> {
+  const { dict } = await getDictionary()
+  return { title: dict.services.title, description: dict.services.subtitle }
 }
 
 export default async function ServicesPage() {
@@ -40,7 +40,7 @@ export default async function ServicesPage() {
 
       {error ? (
         <Container className="pb-24 md:pb-32">
-          <ErrorState body={dict.common.somethingWrong} />
+          <ErrorState title={dict.common.somethingWrong} />
         </Container>
       ) : services.length === 0 ? (
         <SectionCurtain>

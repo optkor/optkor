@@ -7,9 +7,9 @@ import { getSiteSettings } from "@/lib/queries/settings"
 import { getWhatsAppHref } from "@/lib/utils/whatsapp"
 import { PACKAGES } from "@/lib/data/packages"
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Start a production project with OPTKOR.",
+export async function generateMetadata(): Promise<Metadata> {
+  const { dict } = await getDictionary()
+  return { title: dict.contact.title, description: dict.contact.subtitle }
 }
 
 export default async function ContactPage({
@@ -17,7 +17,7 @@ export default async function ContactPage({
 }: {
   searchParams: Promise<{ package?: string; custom?: string }>
 }) {
-  const [{ dict }, { data: settings }, { package: packageSlug, custom }] = await Promise.all([
+  const [{ dict, locale }, { data: settings }, { package: packageSlug, custom }] = await Promise.all([
     getDictionary(),
     getSiteSettings(),
     searchParams,
@@ -35,6 +35,7 @@ export default async function ContactPage({
     <ViewTransition default="page-transition">
       <Container>
         <StartProjectFlow
+          key={locale}
           dict={dict}
           packages={PACKAGES}
           tierNames={tierNames}

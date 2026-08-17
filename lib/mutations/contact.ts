@@ -1,7 +1,8 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
-import { contactSchema } from "@/lib/validations/contact"
+import { getContactSchema } from "@/lib/validations/contact"
+import { getDictionary } from "@/lib/i18n/get-dictionary"
 import type { ContactMessageInsert } from "@/lib/supabase/types"
 
 export type ContactFieldValues = {
@@ -27,6 +28,7 @@ export async function submitContactMessage(
   _prevState: ContactState,
   formData: FormData
 ): Promise<ContactState> {
+  const { dict } = await getDictionary()
   const raw = {
     name: formData.get("name"),
     email: formData.get("email"),
@@ -55,12 +57,12 @@ export async function submitContactMessage(
     timeline: typeof raw.timeline === "string" ? raw.timeline : "",
   }
 
-  const parsed = contactSchema.safeParse(raw)
+  const parsed = getContactSchema(dict).safeParse(raw)
 
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Please check the highlighted fields and try again.",
+      message: dict.contact.validationError,
       fieldErrors: parsed.error.flatten().fieldErrors,
       values,
     }
@@ -68,7 +70,7 @@ export async function submitContactMessage(
 
   // Honeypot tripped: pretend success, drop silently.
   if (parsed.data.website) {
-    return { status: "success", message: "Thanks — your message has been sent." }
+    return { status: "success", message: dict.contact.successBody }
   }
 
   const { website, ...payload } = parsed.data
@@ -90,13 +92,13 @@ export async function submitContactMessage(
     console.error("[submitContactMessage]", error.message)
     return {
       status: "error",
-      message: "Something went wrong sending your message. Please try again or email us directly.",
+      message: dict.contact.errorGeneric,
       values,
     }
   }
 
   return {
     status: "success",
-    message: "Thanks — your message has been sent. We'll be in touch shortly.",
+    message: dict.contact.successBody,
   }
 }
