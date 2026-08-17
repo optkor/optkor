@@ -107,7 +107,6 @@ export function Navbar({ dict, locale }: { dict: Dictionary; locale: Locale }) {
               onMouseLeave={magnetic.onMouseLeave}
               className="group relative"
             >
-              <FrameMark className="opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
               <Link
                 href="/contact"
                 className="block px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-paper transition-colors group-hover:text-accent"
