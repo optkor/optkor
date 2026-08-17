@@ -11,7 +11,7 @@ export function Logo({ className, height = 28 }: { className?: string; height?: 
       width={width}
       height={height}
       priority
-      className={cn("h-auto w-auto", className)}
+      className={cn("theme-invert-light h-auto w-auto", className)}
       style={{ height, width: "auto" }}
     />
   )
