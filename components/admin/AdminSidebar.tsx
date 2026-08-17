@@ -12,6 +12,7 @@ const links = [
   { href: "/admin/testimonials", label: "Testimonials" },
   { href: "/admin/faqs", label: "FAQs" },
   { href: "/admin/team", label: "Team" },
+  { href: "/admin/content", label: "Site Content" },
   { href: "/admin/messages", label: "Messages" },
   { href: "/admin/users", label: "Admin Users" },
   { href: "/admin/settings", label: "Settings" },
