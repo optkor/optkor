@@ -6,7 +6,7 @@ export const contactSchema = z.object({
   company: z.string().trim().max(200).optional().or(z.literal("")),
   phone: z.string().trim().max(50).optional().or(z.literal("")),
   subject: z.string().trim().max(300).optional().or(z.literal("")),
-  message: z.string().trim().min(1, "Message is required").max(5000),
+  message: z.string().trim().max(5000).optional().or(z.literal("")),
   project_type: z.string().trim().max(120).optional().or(z.literal("")),
   budget_range: z.string().trim().max(120).optional().or(z.literal("")),
   timeline: z.string().trim().max(120).optional().or(z.literal("")),

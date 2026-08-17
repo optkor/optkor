@@ -150,7 +150,13 @@ export function ContactForm({
             <input type="hidden" name="timeline" value="" />
           </>
         )}
-        {isPackage && <input type="hidden" name="subject" value={`Package inquiry: ${packageName}`} />}
+        {isPackage && (
+          <input
+            type="hidden"
+            name="subject"
+            value={`Package inquiry: ${packageName}${packagePrice ? ` (${packagePrice})` : ""}`}
+          />
+        )}
 
         {(isPackage || isCustom) && (
           <motion.div
@@ -228,12 +234,12 @@ export function ContactForm({
 
         <motion.div variants={fieldRow}>
           <FormField
-            label={isCustom ? dict.contact.formCustomDetails : dict.contact.formMessage}
+            label={isPackage ? dict.contact.formMessageOptional : isCustom ? dict.contact.formCustomDetails : dict.contact.formMessage}
             htmlFor="message"
-            required
+            required={!isPackage}
             error={state.fieldErrors?.message?.[0]}
           >
-            <Textarea id="message" name="message" required maxLength={5000} rows={6} />
+            <Textarea id="message" name="message" required={!isPackage} maxLength={5000} rows={6} />
           </FormField>
         </motion.div>
 

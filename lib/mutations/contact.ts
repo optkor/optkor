@@ -76,6 +76,12 @@ export async function submitContactMessage(
   const cleanPayload = Object.fromEntries(
     Object.entries(payload).map(([key, value]) => [key, value === "" ? null : value])
   )
+  // The message column is NOT NULL at the database level; the form makes it
+  // optional for package/custom requests, so an empty submission still needs
+  // a real string to insert.
+  if (!cleanPayload.message) {
+    cleanPayload.message = "(No additional message provided.)"
+  }
 
   const supabase = await createClient()
   const { error } = await supabase.from("contact_messages").insert(cleanPayload as ContactMessageInsert)
