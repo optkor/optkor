@@ -22,9 +22,9 @@ export type PackageTier = {
 }
 
 export const PACKAGES: PackageTier[] = [
-  { slug: "creative-support", index: 1, price: "$400", cadence: "/month", badge: null },
-  { slug: "brand-visual-execution", index: 2, price: "$1,000", cadence: "/month", badge: "core" },
-  { slug: "visual-production-partner", index: 3, price: "$2,500", cadence: "/month", badge: "premium" },
+  { slug: "creative-support", index: 1, price: "$500", cadence: "/month", badge: null },
+  { slug: "brand-visual-execution", index: 2, price: "$1,500", cadence: "/month", badge: "core" },
+  { slug: "visual-production-partner", index: 3, price: "$3,200", cadence: "/month", badge: "premium" },
 ]
 
 export type PackageDetail = {
